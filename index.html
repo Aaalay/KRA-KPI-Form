@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAALAY — Weekly KRA & KPI Review</title>
+<link rel="icon" href="data:image/jpeg;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-light:#3D8BF2; --blue:#2A5FE0; --blue-dark:#16299E;
+    --ink:#0E1A33; --slate:#4A5875; --muted:#7C889E;
+    --bg:#EFF3FA; --card:#FFFFFF; --border:#E2E7F1; --accent-tint:#EAF1FF; --field:#fff; --row:#FBFCFE;
+    --g:#12966E; --g-bg:#E4F6EF; --a:#B97509; --a-bg:#FBF0DD; --r:#C6433F; --r-bg:#FBEAE9; --na:#6B7A99; --na-bg:#EDEFF5;
+    --radius:14px; --shadow:0 1px 2px rgba(14,26,51,.04), 0 8px 24px -12px rgba(14,26,51,.14);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter','Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  h1,h2{font-family:'Poppins','Inter',sans-serif;}
+  header.top{background:linear-gradient(115deg,var(--blue-dark),var(--blue) 60%,var(--blue-light));color:#fff;}
+  .top-inner{max-width:920px;margin:0 auto;padding:26px 20px 58px;display:flex;align-items:center;gap:16px;}
+  .logo-badge{width:54px;height:54px;border-radius:14px;overflow:hidden;flex:none;box-shadow:0 0 0 3px rgba(255,255,255,.18);}
+  .logo-badge img{width:100%;height:100%;object-fit:cover;display:block;}
+  h1{font-size:1.45rem;margin:0 0 2px;font-weight:700;}
+  .top-inner p{margin:0;color:#DCE6FA;font-size:.9rem;}
+  main{max-width:920px;margin:-36px auto 60px;padding:0 20px;position:relative;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 24px 26px;margin-bottom:18px;box-shadow:var(--shadow);}
+  .card h2{font-size:1.08rem;margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  .card h2 .num{width:26px;height:26px;border-radius:8px;background:var(--blue-dark);color:#fff;font:700 .8rem 'Inter',sans-serif;display:inline-flex;align-items:center;justify-content:center;}
+  .hint{color:var(--muted);font-size:.84rem;margin:0 0 18px;}
+  label{display:block;font-size:.83rem;font-weight:600;color:var(--slate);margin-bottom:6px;}
+  .req::after{content:" *";color:var(--r);}
+  input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--field);font:inherit;font-size:.93rem;color:var(--ink);}
+  textarea{resize:vertical;min-height:64px;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,95,224,.15);}
+  .grid3{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:16px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:720px){.grid3,.grid2{grid-template-columns:1fr !important;}}
+  .period{margin-top:8px;font-size:.8rem;color:var(--slate);background:var(--accent-tint);border-radius:8px;padding:6px 10px;display:inline-block;}
+  .period b{color:var(--blue-dark);}
+  .field{margin-bottom:16px;}
+
+  /* mandatory banner */
+  .must{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,#FFF6E5,#FFFBF3);border:1.5px solid rgba(185,117,9,.35);border-radius:var(--radius);padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow);}
+  .must .ic{width:38px;height:38px;border-radius:10px;background:var(--a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;flex:none;}
+  .must b.t{display:block;font-size:.98rem;color:#7A4E05;margin-bottom:2px;}
+  .must p{margin:0;font-size:.86rem;color:#6B4A10;}
+  .must .due{margin-top:8px;display:inline-block;font-size:.8rem;font-weight:700;border-radius:999px;padding:4px 12px;background:#fff;color:#7A4E05;border:1px solid rgba(185,117,9,.3);}
+  .must .due.late{background:var(--r);color:#fff;border-color:var(--r);}
+  .must .due.ok{background:var(--g);color:#fff;border-color:var(--g);}
+
+  #sect2,#sect3{display:none;}
+  .owner-line{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--accent-tint);border-radius:10px;padding:10px 14px;margin-bottom:6px;font-size:.88rem;color:var(--blue-dark);}
+  .progress{font-weight:700;}
+  .kra{margin-top:20px;}
+  .kra-title{font-weight:700;font-size:.95rem;margin:0 0 8px;color:var(--ink);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .kra-title .w{font-weight:700;font-size:.72rem;color:var(--blue-dark);background:var(--accent-tint);border-radius:6px;padding:2px 8px;margin-left:6px;}
+  .kra-title small{font-weight:600;color:var(--muted);font-size:.78rem;}
+  .kpi{display:grid;grid-template-columns:minmax(0,1fr) 150px 108px 92px 62px;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--row);margin-bottom:8px;}
+  .kpi:focus-within{border-color:var(--blue-light);}
+  .kpi .nm{font-weight:600;font-size:.9rem;}
+  .kpi .nn{font-size:.66rem;font-weight:700;color:var(--r);background:var(--r-bg);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
+  .kpi .tg{font-size:.76rem;color:var(--muted);}
+  .kpi .tg b{color:var(--slate);font-weight:600;}
+  .kpi input,.kpi select{padding:8px 10px;font-size:.9rem;}
+  .chip{text-align:center;font-weight:700;font-size:.8rem;border-radius:8px;padding:8px 4px;background:var(--na-bg);color:var(--na);}
+  .chip.G{background:var(--g-bg);color:var(--g);} .chip.A{background:var(--a-bg);color:var(--a);} .chip.R{background:var(--r-bg);color:var(--r);}
+  .tick{display:flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;color:var(--muted);margin:0;cursor:pointer;white-space:nowrap;}
+  .tick input{width:16px;height:16px;accent-color:var(--blue);}
+  .cm-toggle{color:var(--blue-dark);}
+  .kpi .why,.kpi .cmt{grid-column:1 / -1;display:none;}
+  .kpi.need-why .why{display:block;}
+  .kpi.show-cmt .cmt{display:block;}
+  .cmt label{font-size:.78rem;margin:6px 0 4px;color:var(--blue-dark);}
+  .cmt input{border-color:rgba(42,95,224,.35);}
+  .kpi.is-na{opacity:.8;}
+  @media (max-width:720px){
+    .kpi{grid-template-columns:1fr 1fr;}
+    .kpi > .info{grid-column:1 / -1;}
+  }
+  .score-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .score-strip > div{flex:1;min-width:110px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+  .score-strip .v{font:700 1.25rem 'Poppins',sans-serif;}
+  .score-strip .l{font-size:.75rem;color:var(--muted);}
+  .yn{display:flex;gap:18px;}
+  .yn label{font-weight:500;display:flex;align-items:center;gap:6px;color:var(--ink);margin:0;}
+  #criticalDetails{display:none;margin-top:10px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue-light),var(--blue-dark));color:#fff;border:none;padding:13px 26px;border-radius:9px;font-size:.98rem;font-weight:700;cursor:pointer;}
+  .btn:focus-visible{outline:3px solid rgba(42,95,224,.4);outline-offset:2px;}
+  .btn[disabled]{opacity:.6;cursor:wait;}
+  .submit-bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .err{color:var(--r);font-size:.85rem;margin-top:10px;white-space:pre-line;}
+  .conf-box{max-width:600px;margin:60px auto;padding:0 20px;text-align:center;}
+  .conf-box .icon{width:68px;height:68px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 18px;}
+  .conf-box p{color:var(--slate);}
+  .footer-note{max-width:920px;margin:0 auto 50px;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center;}
+  .legend{font-size:.78rem;color:var(--muted);margin:4px 0 0;}
+  .owner-box{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--accent-tint);min-height:44px;}
+  .owner-box .av{width:28px;height:28px;border-radius:50%;background:var(--blue-dark);color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+  .owner-box b{color:var(--blue-dark);font-size:.92rem;}
+  .owner-box.empty{background:var(--field);color:var(--muted);font-size:.88rem;}
+  .notice{display:none;margin-top:4px;padding:10px 14px;border-radius:10px;font-size:.84rem;background:var(--a-bg);color:#7A4E05;border:1px solid rgba(185,117,9,.25);}
+  .notice.show{display:block;}
+  .why label,.kra-why label{font-size:.78rem;margin:8px 0 4px;color:var(--r);}
+  .why label::after,.kra-why label::after{content:" *";}
+  .why input{border-color:rgba(198,67,63,.45);}
+  .kpi .last{font-size:.74rem;color:var(--slate);margin-top:2px;}
+  .kra-why{display:none;margin:0 0 10px;padding:10px 12px;border:1px solid rgba(198,67,63,.3);background:var(--r-bg);border-radius:10px;}
+  .kra-why.show{display:block;}
+  .kra-why label{margin-top:0;}
+  .kra-why textarea{min-height:52px;border-color:rgba(198,67,63,.45);}
+  .kra-title small.R{color:var(--r);} .kra-title small.A{color:var(--a);} .kra-title small.G{color:var(--g);}
+  .kpi.missing{border-color:var(--r);}
+  .sticky{position:sticky;bottom:0;z-index:5;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -6px 18px -12px rgba(14,26,51,.25);margin:0 -24px -26px;padding:14px 24px;border-radius:0 0 var(--radius) var(--radius);}
+  .draft-note{font-size:.78rem;color:var(--muted);}
+  .conf-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 22px;text-align:center;}
+  .conf-sum div{border:1px solid var(--border);border-radius:10px;padding:10px;background:var(--card);}
+  .conf-sum .v{font:700 1.3rem 'Poppins',sans-serif;} .conf-sum .l{font-size:.74rem;color:var(--muted);}
+  @media (max-width:560px){.conf-sum{grid-template-columns:repeat(2,1fr);}}
+  .cfg-note{font-size:.74rem;color:var(--muted);margin-top:6px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="logo-badge"><img src="data:image/jpeg;base64,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" alt="AAALAY"></div>
+    <div>
+      <h1>Weekly KRA &amp; KPI Review</h1>
+      <p>Enter last week's actuals. Achievement, KRA score and status are calculated for you.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<div id="formWrap">
+
+  <div class="must" role="note">
+    <div class="ic">!</div>
+    <div>
+      <b class="t">Mandatory: fill this form every Monday</b>
+      <p>Every department head must submit this review <b>every Monday</b> for the <b>previous week (Monday–Sunday)</b>. In "Reporting week", select <b>last week</b>. Late or missed submissions are shown to management on the dashboard.</p>
+      <span class="due" id="dueBadge"></span>
+    </div>
+  </div>
+
+  <section class="card" id="sect1">
+    <h2><span class="num">1</span> Report details</h2>
+    <p class="hint">Only completed weeks of <span id="fyText"></span> can be selected. The latest option is last week.</p>
+    <div class="grid3">
+      <div class="field">
+        <label class="req" for="department">Department</label>
+        <select id="department" disabled><option value="">Loading KPI list…</option></select>
+        <div class="cfg-note" id="cfgNote"></div>
+      </div>
+      <div class="field">
+        <label class="req" for="week">Reporting week (select last week)</label>
+        <select id="week"></select>
+        <div class="period" id="periodText"></div>
+      </div>
+      <div class="field">
+        <label class="req" for="submissionOwner" id="ownerLbl">Submitted by</label>
+        <div class="owner-box empty" id="ownerBox">Filled in from the department</div>
+        <select id="submissionOwner" style="display:none;"></select>
+      </div>
+    </div>
+    <div class="notice" id="dupNotice"></div>
+  </section>
+
+  <section class="card" id="sect2">
+    <h2><span class="num">2</span> KPI actuals</h2>
+    <p class="hint">Enter the actual figure for last week only (not month-to-date). Tick <b>Comment</b> if you want to add a note on a figure. Tick <b>N/A</b> only if the KPI did not apply this week.</p>
+    <div class="owner-line"><span id="ownerText"></span><span class="progress" id="progressText"></span></div>
+    <p class="legend" id="legendText"></p>
+    <div id="kraContainer"></div>
+  </section>
+
+  <section class="card" id="sect3">
+    <h2><span class="num">3</span> Weekly summary &amp; action plan</h2>
+    <div class="score-strip" id="scoreStrip"></div>
+    <div class="grid2">
+      <div class="field">
+        <label class="req" for="keyAchievements">Key activities / highlights of the week</label>
+        <textarea id="keyAchievements" placeholder="e.g. 3 campaigns launched, 42 site visits, 2 property audits"></textarea>
+      </div>
+      <div class="field">
+        <label class="req" for="nextWeekPriorities">Top priorities for next week</label>
+        <textarea id="nextWeekPriorities" placeholder="2–3 priorities for next week"></textarea>
+      </div>
+    </div>
+    <div class="field">
+      <label for="keyChallenges" id="lblGap">Main gaps &amp; reasons</label>
+      <textarea id="keyChallenges" placeholder="Why were Red / Amber KPIs missed?"></textarea>
+    </div>
+    <div class="grid3" style="grid-template-columns:2fr 1fr 1fr;">
+      <div class="field">
+        <label for="correctiveAction" id="lblAction">Corrective action</label>
+        <textarea id="correctiveAction" placeholder="What will be done to recover the Red KPIs"></textarea>
+      </div>
+      <div class="field">
+        <label for="actionOwner" id="lblActOwner">Action owner</label>
+        <input type="text" id="actionOwner" placeholder="Who is responsible">
+      </div>
+      <div class="field">
+        <label for="actionDue" id="lblActDue">Action due date</label>
+        <input type="date" id="actionDue">
+      </div>
+    </div>
+    <div class="field">
+      <label for="supportRequired">Support needed from management</label>
+      <textarea id="supportRequired" placeholder="Optional"></textarea>
+    </div>
+    <div class="field">
+      <label class="req">Any critical issue needing immediate management attention?</label>
+      <div class="yn">
+        <label><input type="radio" name="criticalIssue" value="Yes"> Yes</label>
+        <label><input type="radio" name="criticalIssue" value="No" checked> No</label>
+      </div>
+      <div id="criticalDetails">
+        <label class="req" for="criticalIssueDetails">Describe the issue and the action needed</label>
+        <textarea id="criticalIssueDetails"></textarea>
+      </div>
+    </div>
+    <div class="sticky">
+      <div class="submit-bar">
+        <button class="btn" id="submitBtn" type="button">Submit weekly review</button>
+        <span class="draft-note" id="draftNote">Your entries are saved on this device until you submit.</span>
+      </div>
+      <div class="err" id="errBox"></div>
+      <p class="hint" id="submitStatus" style="margin:8px 0 0;"></p>
+    </div>
+  </section>
+
+</div>
+
+<div class="conf-box" id="confBox" style="display:none;">
+  <div class="icon">&#10003;</div>
+  <h2>Weekly review submitted</h2>
+  <p id="confText"></p>
+  <div class="conf-sum" id="confSum"></div>
+  <button class="btn" onclick="location.reload()">Submit another department</button>
+</div>
+</main>
+
+<p class="footer-note">AAALAY Weekly KRA &amp; KPI Review · Submit every Monday for the previous week · KRAs, KPIs and targets are managed by management from the dashboard.</p>
+
+<script>
+/* Google Apps Script Web App URL */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VFDtukwbl5MfkfzCkWhnotK77DlCS7yYQE8SbM0_qnzolrwKzkK99GjQ/exec";
+const FORM_VERSION = '4.0';
+
+/* =====================================================================
+   SHARED CONFIGURATION — identical block in the Form and the Dashboard.
+   These are the built-in defaults taken from "AAALAY_All_Departments_4KRA_System.xlsx".
+   Management can change KRAs, KPIs, targets, weights and heads from the
+   Dashboard → "KRA & KPI Setup". Saved changes are stored in the Google Sheet
+   (tab "KPI_Config") and both the Form and the Dashboard load them automatically.
+===================================================================== */
+const FY = { start:'2026-04-01', end:'2027-03-31', label:'FY 2026–27' };
+const CATEGORIES = ['Revenue','EBITDA / Cost','Customer Experience','Expansion','People','Risk / Compliance','Management'];
+
+/* KPI row: [KPI name, weekly target, unit, direction, type, non-negotiable]
+   direction: h = higher is better, l = lower is better, t = close to target, b = Yes/No
+   type: n number, p %, c ₹ currency, d hours/days, y yes/no                                   */
+const DEFAULT_RAW = [
+ ['Marketing', 'Nikhil Patil', 'Revenue', [
+  ['Lead Generation & Funnel Contribution', 40, [['Hostel MQLs Generated',60,'leads / week','h','n'],['Cost per Lead (CPL)',120,'₹ per lead','l','c'],['Marketing-Sourced Bookings',10,'bookings / week','h','n']]],
+  ['Digital, Content & SEO Performance', 25, [['Social Media Content Published',3,'posts / week','h','n'],['Website Blogs & SEO Activities',2,'activities / week','h','n'],['Website & GMB Local SEO Activities',3,'activities / week','h','n']]],
+  ['Brand, Campaign & BTL Growth', 20, [['Active Campaign Management & Optimization',3,'campaigns / week','h','n'],['BTL Activities / Activations Supported',1,'activity / week','h','n'],['BTL Leads / Enquiries Generated',10,'leads / week','h','n']]],
+  ['Marketing Execution & Accountability', 15, [['Lead Assignment & Follow-up SLA',95,'%','h','p'],['Marketing Task / Report Closure Rate',90,'%','h','p'],['Management / Creative Support Tasks Completed',90,'%','h','p']]]
+ ]],
+ ['Sales', 'Shakti Pujari', 'Revenue', [
+  ['Revenue & Occupancy Achievement', 40, [['Bookings (net beds)',25,'beds / week','h','n'],['Revenue',300000,'₹ / week','h','c'],['Occupancy % (portfolio)',90,'%','h','p']]],
+  ['Lead-to-Booking Conversion Efficiency', 25, [['Lead → Booking Conversion %',18,'%','h','p'],['Site Visit → Booking Conversion %',40,'%','h','p'],['Unconverted Students Converted',2,'students / week','h','n']]],
+  ['Growth Pipeline — New Inventory & B2B', 20, [['New Acquisition Opportunities (MIT, Non-MIT, WP)',2,'opportunities / week','h','n'],['Pipeline Beds Advanced a Stage',50,'beds / week','h','n'],['B2B ACV Won',500000,'₹ / week','h','c'],['Lost Data Analysis',100,'records / week','h','n']]],
+  ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p'],['Overdue Actions (team)',2,'actions','l','n'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
+ ]],
+ ['Operations', 'Arindam Paul & Jayanta Panigrahi', 'EBITDA / Cost', [
+  ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 8%)',8,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs)',24,'hours','l','d'],['Repeat Complaint Rate',2,'complaints','l','n']]],
+  ['Cost and Resource Efficiency', 25, [['Budget vs Actual Variance (≤ 5%)',5,'%','l','p'],['Operation Cost per Occupied Bed (≤ ₹7,500)',7500,'₹ per bed','l','c'],['Food Cost per Bed as per Utilization (≤ ₹2,500)',2500,'₹ per bed','l','c']]],
+  ['Operational Productivity & Resident Engagement', 20, [['Cost Optimisation Initiatives',1,'initiatives / week','h','n'],['AAALAY Ambassador Identification & Activation',1,'ambassadors / week','h','n'],['Operational Productivity Improvement',100,'% of plan','h','p']]],
+  ['Ops Execution & Accountability', 15, [['Daily Task — Operation Managers',100,'% completed','h','p'],['Safety Incidents',0,'incidents / week','l','n',1],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['Customer Experience', 'Pravin Shinde & Akash Swami', 'Customer Experience', [
+  ['Resident Satisfaction', 40, [['CSAT Score %',85,'%','h','p'],['NPS Score',40,'score','h','n'],['Complaint Resolution within SLA %',90,'%','h','p']]],
+  ['Engagement & Retention', 25, [['Renewal / Retention Rate %',80,'%','h','p'],['Engagement Events Held',1,'events / week','h','n'],['Avg Response Time to Queries',4,'hours','l','d']]],
+  ['Experience Growth', 20, [['New Service Initiatives Launched',1,'initiatives / week','h','n'],['Positive Reviews Generated',5,'reviews / week','h','n'],['Referrals from Residents',3,'referrals / week','h','n']]],
+  ['CX Execution & Accountability', 15, [['Ticket Closure Rate %',90,'%','h','p'],['Escalations Outstanding',2,'escalations','l','n'],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['Business Development', 'Nitesh Verma & Sanket Gaikwad', 'Expansion', [
+  ['New Business Value Generated', 40, [['New Property in Pipeline',3,'properties / week','h','n'],['Pipeline Value Added',500000,'₹ / week','h','c'],['Deals Closed – Won',1,'deals / week','h','n']]],
+  ['Pipeline Quality & Conversion', 25, [['Opportunity → Deal Conversion %',15,'%','h','p'],['Avg Deal Cycle Time',30,'days','l','d'],['Qualified Opportunities Added',1,'opportunities / week','h','n']]],
+  ['Market Expansion', 20, [['New Markets Entered',1,'markets / week','h','n'],['Strategic Tie-ups / MOUs Signed',1,'MOUs / week','h','n'],['New Acquisition Leads Sourced',5,'leads / week','h','n']]],
+  ['BD Execution & Accountability', 15, [['Follow-up SLA Adherence %',90,'%','h','p'],['CRM Hygiene Score %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['HR', 'Monali Mule', 'People', [
+  ['Talent Acquisition & Staffing', 40, [['Open Positions Filled',1,'positions / week','h','n'],['Time-to-Hire',21,'days','l','d'],['Offer Acceptance Rate %',85,'%','h','p']]],
+  ['Employee Engagement & Retention', 25, [['Attrition Rate %',2,'%','l','p'],['Employee Engagement Score %',80,'%','h','p'],['Grievances Resolved within SLA %',90,'%','h','p']]],
+  ['Capability & Culture Building', 20, [['Training Hours Delivered',20,'hours / week','h','n'],['New Policies / Programs Rolled Out',1,'programs / week','h','n'],['Internal Promotions / Mobility',1,'moves / week','h','n']]],
+  ['HR Execution & Accountability', 15, [['Payroll Accuracy %',100,'%','h','p',1],['Compliance Filings On-Time %',100,'%','h','p',1],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['Finance', 'Arpita Nanoty', 'EBITDA / Cost', [
+  ['Financial Control & Compliance', 40, [['Month-End Closing Accuracy & Timeliness (by 5th working day)',95,'%','h','p'],['Bank & Ledger Reconciliation',98,'%','h','p'],['Audit Finding / Statutory Compliance Closure (on time)',100,'%','h','p',1]]],
+  ['Accounts Payable & Vendor Management', 25, [['Vendor Invoice Processing within SLA',95,'%','h','p'],['Vendor Payment Accuracy',99,'%','h','p'],['Outstanding Payables within Approved Terms',95,'%','h','p']]],
+  ['Revenue, Receivables & Cash Flow', 20, [['Rent / Hostel Fee Collection Efficiency',95,'%','h','p'],['Receivables Outstanding / Overdue (% of billed revenue)',5,'%','l','p'],['Collection Reconciliation & Posting Accuracy',99,'%','h','p']]],
+  ['ZOHO, Cost Control & Business Support', 15, [['Monthly Zoho Submission Accuracy & Timeliness (by 5th working day)',100,'%','h','p'],['Budget vs Actual Variance',5,'%','l','p'],['Cost Optimisation / Leakage Initiatives (quarter to date)',2,'initiatives this quarter','h','n']]]
+ ]],
+ ['Nodal & Security', 'Yogesh', 'Risk / Compliance', [
+  ['Student Safety & Security', 40, [['Major Safety / Security Incidents',0,'incidents / week','l','n',1],['Critical Incident Response SLA (10 min)',95,'% within SLA','h','p'],['Student Safety Audit Compliance (Behaviour)',95,'%','h','p']]],
+  ['Compliance, Licensing & Statutory Readiness', 25, [['Mandatory Licenses & Certificates Validity',100,'%','h','p',1],['Property Compliance Audit Closure (Documentation)',95,'% within due date','h','p'],['Fire & Safety Audit Score %',90,'%','h','p']]],
+  ['Risk, Crisis & Stakeholder Management', 20, [['Critical Risk Issues Closed within SLA',95,'%','h','p'],['Police / Local Authority / External Issue Resolution',95,'% within SLA','h','p'],['Emergency Preparedness Drill Compliance',100,'% of scheduled drills','h','p']]],
+  ['Property Protection & Security Operations', 15, [['Security Guard / Security Process Compliance',95,'%','h','p'],['CCTV / Access Control / Security System Uptime',98,'%','h','p'],['Security Incident Investigation & Closure',95,'% within SLA','h','p'],['Properties Covered under Security SOP %',90,'%','h','p']]]
+ ]],
+ ['Legal', 'Shraddha Asare', 'Risk / Compliance', [
+  ['Contract & Agreement Turnaround', 40, [['Agreements Closed On-Time %',90,'%','h','p'],['Avg Contract Turnaround Time',5,'days','l','d'],['Legal Disputes Resolved',1,'disputes / week','h','n']]],
+  ['Risk & Compliance Management', 25, [['Compliance Checklist Adherence %',100,'%','h','p'],['Legal Risks Flagged & Mitigated',2,'risks / week','h','n'],['Litigation Cases Pending',2,'cases','l','n']]],
+  ['Legal Process & Documentation Growth', 20, [['New Templates / SOPs Created',1,'templates / week','h','n'],['Properties with Clean Title / Docs %',90,'%','h','p'],['Vendor / Partner Agreements Reviewed',3,'agreements / week','h','n']]],
+  ['Legal Execution & Accountability', 15, [['Response Time to Legal Queries',24,'hours','l','d'],['Documentation Accuracy %',100,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['Management', 'Uday Yadav', 'Management', [
+  ['Overall Revenue & Occupancy', 40, [['Total Portfolio Revenue',1750000,'₹ / week','h','c'],['Portfolio Occupancy %',90,'%','h','p'],['Bookings vs Annual Plan %',100,'%','h','p']]],
+  ['Cross-Functional Execution', 25, [['Department Avg KRA Score %',85,'%','h','p'],['Cross-team Action Closure Rate %',90,'%','h','p'],['Escalations Resolved %',95,'%','h','p']]],
+  ['Strategic Growth', 20, [['New Properties / Markets Added',1,'per week','h','n'],['B2B / Institutional Revenue',500000,'₹ / week','h','c'],['Strategic Initiatives On-Track %',90,'%','h','p']]],
+  ['Governance & Accountability', 15, [['Weekly Review Attendance / Adherence %',100,'%','h','p'],['Overdue Actions Across Departments',3,'actions','l','n'],['Compliance / Audit Score %',90,'%','h','p']]]
+ ]]
+];
+const DIR_MAP = {h:'higher', l:'lower', t:'target', b:'binary'};
+function buildDefaultConfig(){
+  return {
+    version: 'excel-default', savedBy: '', savedAt: '',
+    rag: { green:90, amber:70, cap:120 },     // Green ≥ 90 · Amber 70–89.9 · Red below 70
+    depts: DEFAULT_RAW.map(([name, heads, cat, kras]) => ({
+      name, cat, heads: heads.split('&').map(s => s.trim()).filter(Boolean),
+      kras: kras.map(([kn, w, kpis]) => ({ name:kn, weight:w,
+        kpis: kpis.map(([n,t,u,b,ty,nn]) => ({ name:n, target:t, unit:u, better:DIR_MAP[b], type:ty, nn:!!nn })) }))
+    }))
+  };
+}
+function validConfig(c){
+  try {
+    return !!(c && Array.isArray(c.depts) && c.depts.length && c.depts.every(d => d && d.name && Array.isArray(d.kras) && d.kras.length &&
+      d.kras.every(k => k && k.name && Array.isArray(k.kpis) && k.kpis.length && k.kpis.every(p => p && p.name))));
+  } catch(e){ return false; }
+}
+let CFG = null, RAG = null, LIB = {}, DEPTS = [], KPI_INDEX = {};
+function applyConfig(cfg){
+  if (!validConfig(cfg)) cfg = buildDefaultConfig();
+  CFG = JSON.parse(JSON.stringify(cfg));
+  RAG = Object.assign({ green:90, amber:70, cap:120 }, CFG.rag || {});
+  RAG.green = +RAG.green; RAG.amber = +RAG.amber; RAG.cap = +RAG.cap || 120;
+  LIB = {}; KPI_INDEX = {};
+  CFG.depts.forEach(d => {
+    const heads = (Array.isArray(d.heads) ? d.heads : String(d.heads || '').split(/[&,]/)).map(s => String(s).trim()).filter(Boolean);
+    LIB[d.name] = { heads, owner: heads.join(' & '), cat: d.cat || 'Management',
+      kras: d.kras.map(k => ({ name:k.name, weight: isNaN(+k.weight) ? 25 : +k.weight,
+        kpis: k.kpis.map(p => { const o = { name:p.name, target: +p.target || 0, unit: p.unit || '', better: p.better || 'higher', type: p.type || 'n', nn: !!p.nn, weight:1, dept:d.name, kra:k.name };
+          KPI_INDEX[d.name + '|' + p.name] = o; return o; }) })) };
+  });
+  DEPTS = Object.keys(LIB);
+}
+applyConfig(buildDefaultConfig());
+
+/* ---------- maths ---------- */
+function achievement(kpi, actualRaw){
+  if (kpi.type === 'y' || kpi.better === 'binary'){
+    const s = String(actualRaw).trim().toLowerCase();
+    if (['yes','y','1','done','completed','true'].includes(s)) return 100;
+    if (['no','n','0','false'].includes(s)) return 0;
+    return null;
+  }
+  const a = parseFloat(String(actualRaw).replace(/[,₹\s%]/g,''));
+  const t = parseFloat(kpi.target);
+  if (isNaN(a) || isNaN(t)) return null;
+  let p;
+  if (kpi.better === 'lower'){
+    if (t === 0) p = a <= 0 ? 100 : 0;
+    else if (a <= 0) p = RAG.cap;
+    else p = t / a * 100;
+  } else if (kpi.better === 'target'){
+    p = t === 0 ? (a === 0 ? 100 : 0) : Math.max(0, 100 - Math.abs(a - t) / t * 100);
+  } else {
+    p = t === 0 ? 100 : a / t * 100;
+  }
+  return Math.round(Math.min(Math.max(p, 0), RAG.cap) * 10) / 10;
+}
+function ragOf(p){ if (p === null || p === undefined || isNaN(p)) return 'NA'; return p >= RAG.green ? 'G' : p >= RAG.amber ? 'A' : 'R'; }
+const RAG_LABEL = { G:'Green', A:'Amber', R:'Red', NA:'N/A' };
+function ragLegendText(){ return 'Green ≥ ' + RAG.green + '% · Amber ' + RAG.amber + '–' + (RAG.green - 0.1) + '% · Red below ' + RAG.amber + '%'; }
+/* KRA score = average of its KPIs; department score = KRA scores weighted by KRA weight */
+function weightedScore(parts){   // parts: [{score, weight}]
+  const v = parts.filter(p => p.score !== null && p.score !== undefined && !isNaN(p.score));
+  const tw = v.reduce((a, p) => a + (p.weight > 0 ? p.weight : 0), 0);
+  if (!v.length) return null;
+  if (!tw) return v.reduce((a, p) => a + p.score, 0) / v.length;
+  return v.reduce((a, p) => a + p.score * (p.weight > 0 ? p.weight : 0), 0) / tw;
+}
+
+function fmtNum(v){ return Number(v).toLocaleString('en-IN', {maximumFractionDigits:2}); }
+function fmtTarget(k){
+  if (k.type === 'y' || k.better === 'binary') return 'Yes';
+  const pre = k.better === 'lower' ? '≤ ' : k.better === 'target' ? '≈ ' : '';
+  const u = String(k.unit || '');
+  if (k.type === 'c') return pre + '₹' + fmtNum(k.target) + (u.replace('₹','').trim() ? ' ' + u.replace('₹','').trim() : '');
+  if (k.type === 'p') return pre + fmtNum(k.target) + (u.startsWith('%') ? u : '% ' + u).replace('% %','%');
+  return pre + fmtNum(k.target) + ' ' + u;
+}
+function dirText(k){ return {higher:'higher is better', lower:'lower is better', target:'closer to target is better', binary:'Yes / No'}[k.better] || ''; }
+
+/* ---------- dates & financial-year weeks (Mon–Sun, FY starts 1 April) ---------- */
+function pad(n){ return String(n).padStart(2,'0'); }
+function iso(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function dayNum(s){ const [y,m,d] = s.split('-').map(Number); return Date.UTC(y,m-1,d)/864e5; }
+function fromDayNum(n){ const d = new Date(n*864e5); return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
+function todayISO(){ return iso(new Date()); }
+function toISODate(v){
+  if (!v) return '';
+  const s = String(v).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+  const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (m) return m[3]+'-'+pad(m[2])+'-'+pad(m[1]);
+  const d = new Date(s); return isNaN(d) ? '' : iso(d);
+}
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function fmtDate(s, withYear){ if (!s) return '—'; const [y,m,d] = s.split('-'); return +d + ' ' + MONTHS[+m-1] + (withYear===false ? '' : ' ' + y); }
+function fyStartYear(s){ const [y,m] = s.split('-').map(Number); return m >= 4 ? y : y - 1; }
+function fyLabel(y){ return 'FY ' + y + '–' + String(y+1).slice(2); }
+function weekOf(s){
+  if (!s) return null;
+  const fy = fyStartYear(s);
+  const start = dayNum(fy+'-04-01'), end = dayNum((fy+1)+'-03-31');
+  const wd = (new Date(start*864e5).getUTCDay()+6)%7;
+  const firstMon = start - wd;
+  const no = Math.floor((dayNum(s) - firstMon)/7) + 1;
+  const monday = firstMon + (no-1)*7;
+  const from = fromDayNum(Math.max(start, monday)), to = fromDayNum(Math.min(end, monday+6));
+  return { fy, no, key: fy*100 + no, from, to, label: 'Wk ' + no + ' · ' + fmtDate(from,false) + ' – ' + fmtDate(to, true) };
+}
+function fyQuarter(s){ const m = +s.split('-')[1]; return m >= 4 ? Math.floor((m-4)/3)+1 : 4; }
+/* the weekly review is due on the Monday after the week ends */
+function dueDateOf(w){ return fromDayNum(dayNum(w.to) + 1); }
+
+
+/* ---------------- helpers ---------------- */
+const $ = id => document.getElementById(id);
+const deptSel = $('department'), weekSel = $('week'), ownerSel = $('submissionOwner');
+let HISTORY = null;
+const esc = s => String(s === undefined || s === null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('fyText').textContent = FY.label + ' (1 Apr 2026 – 31 Mar 2027)';
+
+function getJSON(params){
+  const url = GOOGLE_SCRIPT_URL + (GOOGLE_SCRIPT_URL.indexOf('?') > -1 ? '&' : '?') + params;
+  return fetch(url, {cache:'no-store'}).then(r => r.json()).catch(() => new Promise(resolve => {
+    const cb = 'aaalayForm_' + Date.now() + Math.floor(Math.random()*1e4), s = document.createElement('script');
+    const t = setTimeout(() => done(null), 12000);
+    function done(j){ clearTimeout(t); delete window[cb]; s.remove(); resolve(j); }
+    window[cb] = j => done(j);
+    s.onerror = () => done(null);
+    s.src = url + '&callback=' + cb; document.body.appendChild(s);
+  }));
+}
+
+/* ---------------- department list (loads the latest KRA/KPI setup from the sheet) ---------------- */
+function fillDepts(){
+  const old = deptSel.value;
+  deptSel.innerHTML = '<option value="">Select department</option>';
+  DEPTS.forEach(d => deptSel.add(new Option(d, d)));
+  if (old && DEPTS.includes(old)) deptSel.value = old;
+  deptSel.disabled = false;
+  $('legendText').innerHTML = '<span style="color:var(--g);font-weight:700">Green</span> ≥ ' + RAG.green + '% · <span style="color:var(--a);font-weight:700">Amber</span> ' + RAG.amber + '–' + (RAG.green - 0.1) + '% · <span style="color:var(--r);font-weight:700">Red</span> below ' + RAG.amber + '% · KRA weights shown next to each KRA · <span style="color:var(--r)">Every Red KPI and Red KRA needs a remark *</span>';
+}
+let cfgDone = false;
+function loadConfig(){
+  const fallback = setTimeout(() => { if (!cfgDone){ cfgDone = true; fillDepts(); $('cfgNote').textContent = 'Using built-in KPI list (sheet not reachable).'; } }, 8000);
+  getJSON('action=config').then(j => {
+    clearTimeout(fallback);
+    const fresh = !cfgDone; cfgDone = true;
+    if (j && j.ok && validConfig(j.config)){
+      applyConfig(j.config);
+      $('cfgNote').textContent = 'KPI list updated by management' + (j.config.savedAt ? ' on ' + fmtDate(toISODate(j.config.savedAt)) : '') + '.';
+      if (!fresh && deptSel.value && ![...document.querySelectorAll('#kraContainer .act')].some(el => el.value)) buildKpis(deptSel.value);
+    }
+    fillDepts();
+  });
+}
+
+/* ---------------- week list: completed weeks inside FY, newest (last week) first ---------------- */
+function buildWeeks(){
+  const today = todayISO();
+  const weeks = [];
+  let w = weekOf(FY.start);
+  while (w && w.from <= FY.end){
+    if (w.to < today) weeks.push(w);
+    const next = fromDayNum(dayNum(w.to) + 1);
+    if (next > FY.end) break;
+    w = weekOf(next);
+  }
+  weeks.reverse();
+  weekSel.innerHTML = '';
+  if (!weeks.length){ weekSel.add(new Option('No completed week yet in ' + FY.label, '')); weekSel.disabled = true; }
+  weeks.forEach((w,i) => weekSel.add(new Option(w.label + (i===0 ? '  ← last week (due ' + fmtDate(dueDateOf(w), false) + ')' : ''), w.from + '|' + w.to)));
+  showPeriod();
+}
+function selectedWeek(){ const v = weekSel.value; if (!v) return null; const [from, to] = v.split('|'); return { from, to }; }
+function showPeriod(){
+  const w = selectedWeek();
+  $('periodText').innerHTML = w ? 'From <b>' + fmtDate(w.from) + '</b> to <b>' + fmtDate(w.to) + '</b> · due Monday <b>' + fmtDate(dueDateOf(w)) + '</b>' : 'No week available';
+  refreshDue();
+}
+function refreshDue(){
+  const w = selectedWeek(), b = $('dueBadge');
+  if (!w){ b.textContent = ''; return; }
+  const due = dueDateOf(w), today = todayISO();
+  const done = deptSel.value && HISTORY && historyFor(deptSel.value, w.to).length;
+  if (done){ b.className = 'due ok'; b.textContent = deptSel.value + ' has already submitted for this week'; return; }
+  if (today > due){ b.className = 'due late'; b.textContent = 'Overdue — this week was due on Monday ' + fmtDate(due) + '. Submit now.'; }
+  else { b.className = 'due'; b.textContent = 'Due today: Monday ' + fmtDate(due) + ' for ' + fmtDate(w.from, false) + ' – ' + fmtDate(w.to); }
+}
+buildWeeks();
+$('actionDue').min = todayISO();
+
+/* ---------------- submitted by: from the department head list ---------------- */
+function headsOf(dept){ return LIB[dept].heads; }
+function initials(n){ return n.split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase(); }
+function setOwner(dept){
+  const box = $('ownerBox');
+  ownerSel.innerHTML = '';
+  if (!dept){ box.style.display = 'flex'; box.className = 'owner-box empty'; box.textContent = 'Filled in from the department'; ownerSel.style.display = 'none'; return; }
+  const heads = headsOf(dept);
+  if (heads.length === 1){
+    ownerSel.add(new Option(heads[0], heads[0])); ownerSel.value = heads[0];
+    ownerSel.style.display = 'none';
+    box.style.display = 'flex'; box.className = 'owner-box';
+    box.innerHTML = '<span class="av">' + initials(heads[0]) + '</span><b>' + esc(heads[0]) + '</b>';
+    $('ownerLbl').textContent = 'Submitted by (department head)';
+  } else {
+    ownerSel.add(new Option('Select department head', ''));
+    heads.forEach(h => ownerSel.add(new Option(h, h)));
+    ownerSel.style.display = 'block'; box.style.display = 'none';
+    $('ownerLbl').textContent = 'Submitted by (select head)';
+  }
+  if (!$('actionOwner').value) $('actionOwner').value = heads.length === 1 ? heads[0] : '';
+}
+ownerSel.addEventListener('change', () => { if (!$('actionOwner').value || headsOf(deptSel.value).includes($('actionOwner').value)) $('actionOwner').value = ownerSel.value; saveDraft(); });
+
+/* ---------------- previous submissions (last week's actuals + duplicate check) ---------------- */
+function loadHistory(dept){
+  HISTORY = null;
+  return getJSON('action=data&department=' + encodeURIComponent(dept)).then(j => {
+    if (deptSel.value !== dept) return;
+    HISTORY = j && (j.ok || Array.isArray(j)) ? (Array.isArray(j) ? j : j.rows || []) : [];
+    refreshHistoryHints();
+  });
+}
+function historyFor(dept, toDate){ return (HISTORY || []).filter(r => r.department === dept && toISODate(r.toDate) === toDate); }
+function refreshHistoryHints(){
+  refreshDue();
+  const dept = deptSel.value, w = selectedWeek();
+  const note = $('dupNotice');
+  if (!dept || !w || !HISTORY){ note.classList.remove('show'); return; }
+  const same = historyFor(dept, w.to);
+  if (same.length){
+    const last = same[same.length - 1];
+    note.innerHTML = '<b>' + esc(dept) + '</b> has already submitted this week' + (last.submissionOwner ? ' (by ' + esc(last.submissionOwner) + ')' : '') + '. If you submit again, the new entry replaces the earlier one on the dashboard.';
+    note.classList.add('show');
+  } else note.classList.remove('show');
+  const prevTo = fromDayNum(dayNum(w.from) - 1);
+  const prev = historyFor(dept, prevTo);
+  document.querySelectorAll('.kpi').forEach(row => {
+    const k = kpiOf(row), el = row.querySelector('.last');
+    const p = prev.filter(r => r.kpi === k.name).pop();
+    if (!p || p.actual === '' || p.actual === undefined){ el.textContent = ''; return; }
+    const a = String(p.actual).toUpperCase() === 'NA' ? null : achievement(k, p.actual);
+    el.innerHTML = 'Previous week: <b>' + esc(p.actual) + '</b>' + (a === null ? '' : ' <span style="color:var(--' + ragOf(a).toLowerCase() + ')">(' + a.toFixed(0) + '%)</span>');
+  });
+}
+
+/* ---------------- KPI section ---------------- */
+function buildKpis(dept){
+  const d = LIB[dept];
+  $('ownerText').innerHTML = 'Department head: <b>' + esc(d.owner) + '</b> · ' + d.kras.length + ' KRAs';
+  const box = $('kraContainer'); box.innerHTML = '';
+  d.kras.forEach((kra, ki) => {
+    const wrap = document.createElement('div'); wrap.className = 'kra';
+    wrap.innerHTML = '<div class="kra-title"><span>KRA ' + (ki+1) + ': ' + esc(kra.name) + '<span class="w">Weight ' + kra.weight + '%</span></span><small id="kra_s_' + ki + '"></small></div>' +
+      '<div class="kra-why" id="kra_w_' + ki + '"><label for="kra_r_' + ki + '">This KRA is Red — explain the overall gap and recovery plan</label><textarea class="kra-rem" id="kra_r_' + ki + '" placeholder="What is going wrong in this KRA and what will be done"></textarea></div>';
+    kra.kpis.forEach((k, kj) => {
+      const id = 'k' + ki + '_' + kj;
+      const row = document.createElement('div');
+      row.className = 'kpi'; row.dataset.ki = ki; row.dataset.kj = kj;
+      const input = (k.type === 'y' || k.better === 'binary')
+        ? '<select class="act" id="' + id + '" aria-label="Actual for ' + esc(k.name) + '"><option value="">Select</option><option>Yes</option><option>No</option></select>'
+        : '<input class="act" id="' + id + '" type="number" step="any" min="0" inputmode="decimal" placeholder="Actual' + (k.type === 'p' ? ' %' : '') + '" aria-label="Actual for ' + esc(k.name) + '">';
+      row.innerHTML =
+        '<div class="info"><div class="nm">' + esc(k.name) + (k.nn ? '<span class="nn">Non-negotiable</span>' : '') + '</div>' +
+        '<div class="tg">Target <b>' + esc(fmtTarget(k)) + '</b> · ' + dirText(k) + '</div><div class="last"></div></div>' +
+        '<div>' + input + '</div>' +
+        '<div class="chip" id="' + id + '_c">—</div>' +
+        '<label class="tick cm-toggle" title="Add a comment on this figure"><input type="checkbox" class="cm" id="' + id + '_cm"> Comment</label>' +
+        '<label class="tick na-toggle"><input type="checkbox" class="na" id="' + id + '_na"> N/A</label>' +
+        '<div class="cmt"><label for="' + id + '_ct">Comment on this count (optional)</label><input type="text" class="cm-in" id="' + id + '_ct" placeholder="e.g. includes 2 walk-in bookings from last month"></div>' +
+        '<div class="why"><label for="' + id + '_w" class="why-lbl">Remark: reason for gap &amp; action</label><input type="text" class="why-in" id="' + id + '_w" placeholder="Why is this KPI Red and what will be done?"></div>';
+      wrap.appendChild(row);
+    });
+    box.appendChild(wrap);
+  });
+  box.querySelectorAll('.kpi').forEach(row => {
+    const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm');
+    act.addEventListener('input', () => updateRow(row));
+    act.addEventListener('change', () => updateRow(row));
+    na.addEventListener('change', () => { act.disabled = na.checked; if (na.checked) act.value = ''; updateRow(row); });
+    cm.addEventListener('change', () => { row.classList.toggle('show-cmt', cm.checked); if (cm.checked) setTimeout(() => row.querySelector('.cm-in').focus(), 30); });
+  });
+  restoreDraft();
+  document.querySelectorAll('.kpi').forEach(row => { row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
+  refreshHistoryHints();
+}
+function kpiOf(row){ return LIB[deptSel.value].kras[row.dataset.ki].kpis[row.dataset.kj]; }
+function rowResult(row){
+  const k = kpiOf(row);
+  const na = row.querySelector('.na').checked;
+  const val = row.querySelector('.act').value;
+  const comment = row.querySelector('.cm').checked ? row.querySelector('.cm-in').value.trim() : '';
+  if (na) return { k, na:true, val:'NA', ach:null, rag:'NA', comment };
+  const ach = val === '' ? null : achievement(k, val);
+  return { k, na:false, val, ach, rag: ach === null ? '' : ragOf(ach), comment };
+}
+function updateRow(row){
+  const r = rowResult(row);
+  const chip = row.querySelector('.chip');
+  chip.className = 'chip' + (r.rag && r.rag !== 'NA' ? ' ' + r.rag : '');
+  chip.textContent = r.na ? 'N/A' : (r.ach === null ? '—' : r.ach.toFixed(0) + '% ' + RAG_LABEL[r.rag]);
+  row.classList.toggle('is-na', r.na);
+  row.classList.toggle('need-why', r.na || r.rag === 'R');
+  row.querySelector('.why-lbl').textContent = r.na ? 'Remark: why is this KPI not applicable this week' : 'Remark: reason for gap & action';
+  if (r.ach !== null || r.na) row.classList.remove('missing');
+  refreshTotals();
+}
+function kraScores(){
+  const rows = [...document.querySelectorAll('.kpi')];
+  const res = rows.map(rowResult);
+  return LIB[deptSel.value].kras.map((kra, ki) => {
+    const rs = res.filter((r, i) => +rows[i].dataset.ki === ki && r.ach !== null);
+    return rs.length ? rs.reduce((a,r) => a + r.ach, 0) / rs.length : null;
+  });
+}
+function deptScoreOf(ks){ return weightedScore(LIB[deptSel.value].kras.map((k, i) => ({ score: ks[i], weight: k.weight }))); }
+function refreshTotals(){
+  const d = LIB[deptSel.value]; if (!d) return;
+  const rows = [...document.querySelectorAll('.kpi')];
+  const res = rows.map(rowResult);
+  const filled = res.filter(r => r.na || r.ach !== null).length;
+  $('progressText').textContent = filled + ' of ' + rows.length + ' KPIs filled';
+  const counts = {G:0, A:0, R:0, NA:0};
+  res.forEach(r => { if (r.rag) counts[r.rag]++; });
+  const ks = kraScores();
+  let redKras = 0;
+  ks.forEach((s, ki) => {
+    const el = $('kra_s_' + ki);
+    const rg = s === null ? '' : ragOf(s);
+    el.className = rg; el.textContent = s === null ? '' : 'KRA score ' + s.toFixed(0) + '% · ' + RAG_LABEL[rg];
+    $('kra_w_' + ki).classList.toggle('show', rg === 'R');
+    if (rg === 'R') redKras++;
+  });
+  const score = deptScoreOf(ks);
+  const nnFail = res.some(r => r.k.nn && r.rag === 'R');
+  $('scoreStrip').innerHTML =
+    '<div><div class="v" style="color:' + (score===null ? 'var(--muted)' : 'var(--' + ragOf(score).toLowerCase() + ')') + '">' + (score===null ? '—' : score.toFixed(1) + '%') + '</div><div class="l">Department score (weighted)</div></div>' +
+    '<div><div class="v" style="color:var(--g)">' + counts.G + '</div><div class="l">Green KPIs</div></div>' +
+    '<div><div class="v" style="color:var(--a)">' + counts.A + '</div><div class="l">Amber KPIs</div></div>' +
+    '<div><div class="v" style="color:var(--r)">' + counts.R + '</div><div class="l">Red KPIs' + (redKras ? ' · ' + redKras + ' Red KRA' + (redKras > 1 ? 's' : '') : '') + (nnFail ? ' · non-negotiable failed' : '') + '</div></div>';
+  $('lblGap').classList.toggle('req', counts.R + counts.A > 0);
+  ['lblAction','lblActOwner','lblActDue'].forEach(id => $(id).classList.toggle('req', counts.R > 0));
+}
+
+deptSel.addEventListener('change', () => {
+  const on = !!deptSel.value;
+  $('sect2').style.display = on ? 'block' : 'none';
+  $('sect3').style.display = on ? 'block' : 'none';
+  $('actionOwner').value = '';
+  setOwner(deptSel.value);
+  if (on){ buildKpis(deptSel.value); loadHistory(deptSel.value); } else { $('dupNotice').classList.remove('show'); refreshDue(); }
+});
+weekSel.addEventListener('change', () => { showPeriod(); if (deptSel.value) buildKpis(deptSel.value); });
+document.querySelectorAll('input[name="criticalIssue"]').forEach(r => r.addEventListener('change', () => {
+  $('criticalDetails').style.display = document.querySelector('input[name="criticalIssue"]:checked').value === 'Yes' ? 'block' : 'none';
+}));
+
+/* ---------------- draft auto-save (per department + week, this device only) ---------------- */
+const TEXT_IDS = ['keyAchievements','nextWeekPriorities','keyChallenges','correctiveAction','actionOwner','actionDue','supportRequired','criticalIssueDetails'];
+function draftKey(){ const w = selectedWeek(); return deptSel.value && w ? 'aaalay_draft_v4_' + deptSel.value + '|' + w.to : null; }
+function saveDraft(){
+  const key = draftKey(); if (!key) return;
+  const data = { owner: ownerSel.value, crit: document.querySelector('input[name="criticalIssue"]:checked').value, f:{}, k:{} };
+  TEXT_IDS.forEach(id => data.f[id] = $(id).value);
+  document.querySelectorAll('#kraContainer input, #kraContainer select, #kraContainer textarea').forEach(el => data.k[el.id] = el.type === 'checkbox' ? el.checked : el.value);
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e){}
+}
+function restoreDraft(){
+  const key = draftKey(); let data = null;
+  try { data = JSON.parse(localStorage.getItem(key) || 'null'); } catch(e){}
+  TEXT_IDS.forEach(id => { if (id !== 'actionOwner') $(id).value = ''; });
+  if (!data) return;
+  TEXT_IDS.forEach(id => { if (data.f[id] !== undefined && data.f[id] !== '') $(id).value = data.f[id]; });
+  if (data.owner && [...ownerSel.options].some(o => o.value === data.owner)) ownerSel.value = data.owner;
+  const cr = document.querySelector('input[name="criticalIssue"][value="' + (data.crit || 'No') + '"]'); if (cr){ cr.checked = true; cr.dispatchEvent(new Event('change')); }
+  Object.keys(data.k).forEach(id => { const el = $(id); if (!el) return; if (el.type === 'checkbox'){ el.checked = data.k[id]; } else el.value = data.k[id]; });
+  document.querySelectorAll('.kpi').forEach(row => { row.querySelector('.act').disabled = row.querySelector('.na').checked; });
+  $('draftNote').textContent = 'Restored your saved entries for this week.';
+}
+function clearDraft(){ const key = draftKey(); if (key) try { localStorage.removeItem(key); } catch(e){} }
+document.addEventListener('input', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel) saveDraft(); });
+document.addEventListener('change', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel) saveDraft(); });
+
+/* ---------------- validation & payload ---------------- */
+function validate(){
+  const errs = [];
+  const w = selectedWeek();
+  let firstBad = null;
+  const mark = el => { if (!firstBad) firstBad = el; };
+  if (!deptSel.value) errs.push('Select a department.');
+  if (!w) errs.push('Select a reporting week.');
+  else if (w.to >= todayISO() || w.from < FY.start || w.to > FY.end) errs.push('The reporting week must be a completed week within ' + FY.label + '.');
+  if (deptSel.value && !ownerSel.value){ errs.push('Select which department head is submitting.'); mark(ownerSel); }
+  let missing = 0, noReason = 0, noComment = 0, reds = 0, ambers = 0;
+  document.querySelectorAll('.kpi').forEach(row => {
+    const r = rowResult(row);
+    if (!r.na && r.ach === null){ missing++; row.classList.add('missing'); mark(row); }
+    if ((r.na || r.rag === 'R') && !row.querySelector('.why-in').value.trim()){ noReason++; mark(row.querySelector('.why-in')); }
+    if (row.querySelector('.cm').checked && !r.comment){ noComment++; mark(row.querySelector('.cm-in')); }
+    if (r.rag === 'R') reds++; if (r.rag === 'A') ambers++;
+  });
+  if (missing) errs.push(missing + ' KPI(s) have no actual. Enter a value or tick N/A.');
+  if (noReason) errs.push(noReason + ' Red / N/A KPI(s) need a remark.');
+  if (noComment) errs.push(noComment + ' KPI(s) have Comment ticked but no comment — type it or untick Comment.');
+  let kraNoReason = 0;
+  if (deptSel.value) kraScores().forEach((s, ki) => { if (s !== null && ragOf(s) === 'R' && !$('kra_r_' + ki).value.trim()){ kraNoReason++; mark($('kra_r_' + ki)); } });
+  if (kraNoReason) errs.push(kraNoReason + ' Red KRA(s) need a remark.');
+  if (!$('keyAchievements').value.trim()){ errs.push('Add the key activities / highlights of the week.'); mark($('keyAchievements')); }
+  if (!$('nextWeekPriorities').value.trim()){ errs.push('Add the top priorities for next week.'); mark($('nextWeekPriorities')); }
+  if (reds + ambers && !$('keyChallenges').value.trim()){ errs.push('Add the main gaps & reasons.'); mark($('keyChallenges')); }
+  if (reds){
+    if (!$('correctiveAction').value.trim()){ errs.push('Add a corrective action for the Red KPIs.'); mark($('correctiveAction')); }
+    if (!$('actionOwner').value.trim()){ errs.push('Add the action owner.'); mark($('actionOwner')); }
+    if (!$('actionDue').value){ errs.push('Add the action due date.'); mark($('actionDue')); }
+  }
+  if ($('actionDue').value && $('actionDue').value < todayISO()) errs.push('Action due date cannot be in the past.');
+  if (document.querySelector('input[name="criticalIssue"]:checked').value === 'Yes' && !$('criticalIssueDetails').value.trim()){ errs.push('Describe the critical issue.'); mark($('criticalIssueDetails')); }
+  $('errBox').textContent = errs.join('\n');
+  if (firstBad){ firstBad.scrollIntoView({behavior:'smooth', block:'center'}); if (firstBad.focus) setTimeout(() => firstBad.focus({preventScroll:true}), 300); }
+  return errs.length === 0;
+}
+function collectPayload(){
+  const dept = deptSel.value, w = selectedWeek(), wk = weekOf(w.to);
+  const rows = [...document.querySelectorAll('.kpi')];
+  const res = rows.map(rowResult);
+  const ks = kraScores();
+  const score = deptScoreOf(ks);
+  const counts = {G:0, A:0, R:0, NA:0};
+  res.forEach(r => { if (r.rag) counts[r.rag]++; });
+  const sid = dept.replace(/[^A-Za-z]/g,'').slice(0,6).toUpperCase() + '-' + w.to.replace(/-/g,'') + '-' + Date.now().toString(36).toUpperCase();
+  const common = {
+    submissionId: sid, timestamp: new Date().toISOString(), fy: fyLabel(wk.fy), weekNo: wk.no,
+    fromDate: w.from, toDate: w.to, month: w.to.slice(0,7), quarter: 'Q' + fyQuarter(w.to),
+    department: dept, departmentHead: LIB[dept].owner, submissionOwner: ownerSel.value,
+    deptScore: score === null ? '' : score.toFixed(1),
+    overallPerformance: score === null ? 'Not Applicable' : RAG_LABEL[ragOf(score)] + ' (' + score.toFixed(1) + '%)',
+    greenCount: counts.G, amberCount: counts.A, redCount: counts.R, naCount: counts.NA,
+    keyAchievements: $('keyAchievements').value.trim(),
+    keyChallenges: $('keyChallenges').value.trim(),
+    correctiveAction: $('correctiveAction').value.trim(),
+    actionOwner: $('actionOwner').value.trim(),
+    actionDueDate: $('actionDue').value,
+    supportRequired: $('supportRequired').value.trim(),
+    nextWeekPriorities: $('nextWeekPriorities').value.trim(),
+    criticalIssue: document.querySelector('input[name="criticalIssue"]:checked').value,
+    criticalIssueDetails: $('criticalIssueDetails').value.trim(),
+    formVersion: FORM_VERSION
+  };
+  return res.map((r, i) => {
+    const ki = +rows[i].dataset.ki, kra = LIB[dept].kras[ki], s = ks[ki];
+    return Object.assign({}, common, {
+      kra: kra.name, kraWeight: kra.weight, kraScore: s === null ? '' : s.toFixed(1), kraStatus: s === null ? 'Not Applicable' : RAG_LABEL[ragOf(s)],
+      kraRemark: $('kra_w_' + ki).classList.contains('show') ? $('kra_r_' + ki).value.trim() : '',
+      kpi: r.k.name, target: r.k.target, unit: r.k.unit, better: r.k.better, nonNegotiable: r.k.nn ? 'Yes' : 'No',
+      actual: r.val, achievementPct: r.ach === null ? '' : r.ach.toFixed(1),
+      status: r.na ? 'Not Applicable' : RAG_LABEL[r.rag],
+      remarks: rows[i].querySelector('.why-in').value.trim(),
+      kpiComment: r.comment
+    });
+  });
+}
+
+$('submitBtn').addEventListener('click', async () => {
+  if (!validate()) return;
+  const w = selectedWeek();
+  if (HISTORY && historyFor(deptSel.value, w.to).length && !confirm(deptSel.value + ' has already submitted for ' + fmtDate(w.from) + ' – ' + fmtDate(w.to) + '. Your new entry will replace it on the dashboard. Submit again?')) return;
+  const rows = collectPayload();
+  const btn = $('submitBtn'); btn.disabled = true;
+  $('submitStatus').textContent = 'Sending to Google Sheet…';
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(rows) });
+    clearDraft();
+    const c = { G:+rows[0].greenCount, A:+rows[0].amberCount, R:+rows[0].redCount };
+    $('formWrap').style.display = 'none';
+    $('confBox').style.display = 'block';
+    $('confText').textContent = deptSel.value + ' · ' + fmtDate(w.from) + ' to ' + fmtDate(w.to) + ' · submitted by ' + ownerSel.value + '. It will appear on the management dashboard. Reference: ' + rows[0].submissionId;
+    $('confSum').innerHTML = '<div><div class="v">' + (rows[0].deptScore ? rows[0].deptScore + '%' : '—') + '</div><div class="l">Department score</div></div>' +
+      '<div><div class="v" style="color:var(--g)">' + c.G + '</div><div class="l">Green</div></div><div><div class="v" style="color:var(--a)">' + c.A + '</div><div class="l">Amber</div></div><div><div class="v" style="color:var(--r)">' + c.R + '</div><div class="l">Red</div></div>';
+    window.scrollTo(0, 0);
+  } catch(e){
+    btn.disabled = false;
+    $('submitStatus').textContent = 'Could not reach the Google Sheet. Check your internet connection and try again — your entries are still saved on this device.';
+  }
+});
+
+loadConfig();
+</script>
+</body>
+</html>
