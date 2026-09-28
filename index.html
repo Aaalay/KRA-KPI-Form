@@ -472,11 +472,23 @@ function fillDepts(){
   $('legendText').innerHTML = '<span style="color:var(--g);font-weight:700">Green</span> ≥ ' + RAG.green + '% · <span style="color:var(--a);font-weight:700">Amber</span> ' + RAG.amber + '–' + (RAG.green - 0.1) + '% · <span style="color:var(--r);font-weight:700">Red</span> below ' + RAG.amber + '% · KRA weights shown next to each KRA · <span style="color:var(--r)">Every Red KPI and Red KRA needs a remark *</span>';
 }
 let cfgDone = false;
+let BACKEND_OK = true;
+function backendWarning(){
+  if (!BACKEND_OK) return;
+  BACKEND_OK = false;
+  const box = document.createElement('div');
+  box.className = 'notice show';
+  box.style.margin = '0 0 16px';
+  box.innerHTML = '<b>The Google Sheet is not responding.</b> You can still fill this form — your entries are saved on this device — but the submission may not save. If it is not confirmed, use "Send it now" the next time you open the form, or download the backup copy and send it to the admin.';
+  const main = document.querySelector('main');
+  main.insertBefore(box, main.firstChild);
+}
 function loadConfig(){
-  const fallback = setTimeout(() => { if (!cfgDone){ cfgDone = true; fillDepts(); $('cfgNote').textContent = 'Using built-in KPI list (sheet not reachable).'; } }, 8000);
+  const fallback = setTimeout(() => { if (!cfgDone){ cfgDone = true; fillDepts(); $('cfgNote').textContent = 'Using built-in KPI list (sheet not reachable).'; backendWarning(); } }, 8000);
   getJSON('action=config').then(j => {
     clearTimeout(fallback);
     const fresh = !cfgDone; cfgDone = true;
+    if (!j || !j.ok) backendWarning();
     if (j && j.ok && validConfig(j.config)){
       applyConfig(j.config);
       $('cfgNote').textContent = 'KPI list updated by management' + (j.config.savedAt ? ' on ' + fmtDate(toISODate(j.config.savedAt)) : '') + '.';
@@ -793,28 +805,123 @@ function collectPayload(){
   });
 }
 
+/* ================= submission with delivery confirmation =================
+   The old code used fetch(..., {mode:'no-cors'}), which always "succeeds" even when the
+   Apps Script never wrote the rows — the submission looked sent but was silently lost.
+   Now every submission is checked against the sheet, and anything unconfirmed is kept
+   on the device so it can be re-sent. */
+const PENDING_KEY = 'aaalay_pending_submission_v1';
+function loadPending(){ try { return JSON.parse(localStorage.getItem(PENDING_KEY) || 'null'); } catch(e){ return null; } }
+function savePending(p){ try { p ? localStorage.setItem(PENDING_KEY, JSON.stringify(p)) : localStorage.removeItem(PENDING_KEY); } catch(e){} }
+
+async function postRows(rows){
+  const body = JSON.stringify(rows);
+  try {                                   /* 1st try: read the Apps Script reply */
+    const res = await fetch(GOOGLE_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body, redirect:'follow', cache:'no-store' });
+    const txt = await res.text();
+    try { const j = JSON.parse(txt);
+      if (j && (j.ok === true || j.result === 'success')) return { state:'ok' };
+      if (j && j.error) return { state:'error', msg: String(j.error) };
+    } catch(e){}
+    if (res.ok) return { state:'sent' };
+    return { state:'error', msg: 'HTTP ' + res.status };
+  } catch(e){                             /* CORS blocked the reply: send blind, then verify */
+    try { await fetch(GOOGLE_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body }); return { state:'sent' }; }
+    catch(e2){ return { state:'error', msg:'no connection' }; }
+  }
+}
+function rowSid(r){ return String(r.submissionId || r.submissionid || r['Submission ID'] || ''); }
+async function verifySaved(sid, dept, toDate, beforeCount){
+  const waits = [2500, 4000, 6000, 8000, 10000];
+  for (let i = 0; i < waits.length; i++){
+    await new Promise(r => setTimeout(r, waits[i]));
+    const j = await getJSON('action=data&department=' + encodeURIComponent(dept));
+    const rows = j && (Array.isArray(j) ? j : j.rows) || [];
+    if (rows.some(r => rowSid(r) === sid)) return true;                                   // exact match on the reference
+    const now = rows.filter(r => r.department === dept && toISODate(r.toDate) === toDate).length;
+    if (beforeCount !== null && now > beforeCount) return true;                            // fallback: new rows for this week
+    $('submitStatus').textContent = 'Confirming with the Google Sheet… (' + (i + 1) + '/' + waits.length + ')';
+  }
+  return false;
+}
+function backupCSV(rows){
+  const h = Object.keys(rows[0]);
+  const q = v => '"' + String(v === undefined || v === null ? '' : v).replace(/"/g, '""') + '"';
+  const csv = [h.join(',')].concat(rows.map(r => h.map(k => q(r[k])).join(','))).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type:'text/csv;charset=utf-8;' }));
+  a.download = 'AAALAY_backup_' + rows[0].department.replace(/\W+/g, '') + '_' + rows[0].toDate + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function showUnconfirmed(rows, msg){
+  const sid = rows[0].submissionId;
+  $('submitBtn').disabled = false;
+  $('errBox').innerHTML = '<b>Not saved yet.</b> ' + esc(msg || 'The Google Sheet did not confirm this submission.') +
+    ' Your entries are still on this device (reference ' + esc(sid) + '). Press "Submit weekly review" again in a minute, or download a backup and send it to the admin.';
+  const bar = $('submitStatus');
+  bar.innerHTML = '<button class="btn secondary" type="button" id="bkBtn" style="margin-top:6px">Download backup copy</button>';
+  $('bkBtn').addEventListener('click', () => backupCSV(rows));
+}
+function showSuccess(rows, confirmed){
+  const w = selectedWeek();
+  const c = { G:+rows[0].greenCount, A:+rows[0].amberCount, R:+rows[0].redCount };
+  $('formWrap').style.display = 'none';
+  $('confBox').style.display = 'block';
+  $('confText').textContent = rows[0].department + ' · ' + fmtDate(rows[0].fromDate) + ' to ' + fmtDate(rows[0].toDate) + ' · submitted by ' + rows[0].submissionOwner +
+    (confirmed ? '. Saved in the Google Sheet and now on the management dashboard.' : '. Sent to the Google Sheet.') + ' Reference: ' + rows[0].submissionId;
+  $('confSum').innerHTML = '<div><div class="v">' + (rows[0].deptScore ? rows[0].deptScore + '%' : '—') + '</div><div class="l">Department score</div></div>' +
+    '<div><div class="v" style="color:var(--g)">' + c.G + '</div><div class="l">Green</div></div><div><div class="v" style="color:var(--a)">' + c.A + '</div><div class="l">Amber</div></div><div><div class="v" style="color:var(--r)">' + c.R + '</div><div class="l">Red</div></div>';
+  window.scrollTo(0, 0);
+}
+async function sendSubmission(rows){
+  const btn = $('submitBtn'); btn.disabled = true;
+  $('errBox').innerHTML = ''; $('submitStatus').textContent = 'Sending to Google Sheet…';
+  const dept = rows[0].department, to = rows[0].toDate, sid = rows[0].submissionId;
+  savePending({ rows, at: new Date().toISOString() });                      // keep a copy until the sheet confirms
+  const before = HISTORY ? historyFor(dept, to).length : null;
+  const res = await postRows(rows);
+  if (res.state === 'error'){ savePending({ rows, at: new Date().toISOString() }); showUnconfirmed(rows, 'The Google Sheet replied: ' + res.msg + '.'); return; }
+  $('submitStatus').textContent = 'Confirming with the Google Sheet…';
+  const ok = await verifySaved(sid, dept, to, before);
+  if (ok || res.state === 'ok'){
+    clearDraft(); savePending(null); HISTORY = null; loadHistory(dept);
+    showSuccess(rows, true);
+  } else {
+    showUnconfirmed(rows, 'The sheet has not shown this submission yet.');
+  }
+}
+
 $('submitBtn').addEventListener('click', async () => {
+  const pend = loadPending();
+  if (pend && pend.rows && pend.rows.length && pend.rows[0].department === deptSel.value && pend.rows[0].toDate === (selectedWeek() || {}).to){
+    await sendSubmission(pend.rows);                                        // re-send the same reference, never a duplicate
+    return;
+  }
   if (!validate()) return;
   const w = selectedWeek();
   if (HISTORY && historyFor(deptSel.value, w.to).length && !confirm(deptSel.value + ' has already submitted for ' + fmtDate(w.from) + ' – ' + fmtDate(w.to) + '. Your new entry will replace it on the dashboard. Submit again?')) return;
-  const rows = collectPayload();
-  const btn = $('submitBtn'); btn.disabled = true;
-  $('submitStatus').textContent = 'Sending to Google Sheet…';
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(rows) });
-    clearDraft();
-    const c = { G:+rows[0].greenCount, A:+rows[0].amberCount, R:+rows[0].redCount };
-    $('formWrap').style.display = 'none';
-    $('confBox').style.display = 'block';
-    $('confText').textContent = deptSel.value + ' · ' + fmtDate(w.from) + ' to ' + fmtDate(w.to) + ' · submitted by ' + ownerSel.value + '. It will appear on the management dashboard. Reference: ' + rows[0].submissionId;
-    $('confSum').innerHTML = '<div><div class="v">' + (rows[0].deptScore ? rows[0].deptScore + '%' : '—') + '</div><div class="l">Department score</div></div>' +
-      '<div><div class="v" style="color:var(--g)">' + c.G + '</div><div class="l">Green</div></div><div><div class="v" style="color:var(--a)">' + c.A + '</div><div class="l">Amber</div></div><div><div class="v" style="color:var(--r)">' + c.R + '</div><div class="l">Red</div></div>';
-    window.scrollTo(0, 0);
-  } catch(e){
-    btn.disabled = false;
-    $('submitStatus').textContent = 'Could not reach the Google Sheet. Check your internet connection and try again — your entries are still saved on this device.';
-  }
+  await sendSubmission(collectPayload());
 });
+
+/* unconfirmed submission from an earlier visit: offer to re-send it */
+(function pendingBanner(){
+  const p = loadPending();
+  if (!p || !p.rows || !p.rows.length) return;
+  const r = p.rows[0];
+  const box = document.createElement('div');
+  box.className = 'notice show';
+  box.style.margin = '0 0 16px';
+  box.innerHTML = '<b>Earlier submission not confirmed.</b> ' + esc(r.department) + ' · ' + esc(fmtDate(r.fromDate)) + ' – ' + esc(fmtDate(r.toDate)) +
+    ' (reference ' + esc(r.submissionId) + ') was never confirmed by the Google Sheet. ' +
+    '<button class="btn small" type="button" id="pendSend" style="margin:8px 8px 0 0">Send it now</button>' +
+    '<button class="btn secondary small" type="button" id="pendCsv" style="margin:8px 8px 0 0">Download backup</button>' +
+    '<button class="btn secondary small" type="button" id="pendDrop" style="margin:8px 0 0">Discard</button>';
+  const main = document.querySelector('main');
+  main.insertBefore(box, main.firstChild);
+  $('pendSend').addEventListener('click', async () => { box.remove(); await sendSubmission(p.rows); });
+  $('pendCsv').addEventListener('click', () => backupCSV(p.rows));
+  $('pendDrop').addEventListener('click', () => { savePending(null); box.remove(); });
+})();
 
 loadConfig();
 </script>
