@@ -109,15 +109,6 @@
   .why label,.kra-why label{font-size:.78rem;margin:8px 0 4px;color:var(--r);}
   .why label::after,.kra-why label::after{content:" *";}
   .why input{border-color:rgba(198,67,63,.45);}
-  .parts{display:flex;gap:5px;margin-bottom:5px;}
-  .parts .pb{flex:1;min-width:0;}
-  .parts .pb span{display:block;font-size:.62rem;font-weight:700;color:var(--muted);text-align:center;margin-bottom:2px;letter-spacing:.01em;}
-  .parts .pb span i{font-style:normal;display:block;font-size:.58rem;font-weight:600;color:var(--blue);}
-  .parts .pb input{width:100%;padding:7px 2px;text-align:center;font-size:.86rem;border:1.5px solid var(--border);border-radius:7px;background:var(--field);color:var(--ink);font-family:inherit;}
-  .parts .pb input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,95,224,.15);}
-  .tot{display:flex;align-items:center;gap:6px;}
-  .tot span{font-size:.62rem;font-weight:700;color:var(--muted);}
-  .act.total{flex:1;background:var(--accent-tint);font-weight:700;text-align:center;}
   .kpi .last{font-size:.74rem;color:var(--slate);margin-top:2px;}
   .kra-why{display:none;margin:0 0 10px;padding:10px 12px;border:1px solid rgba(198,67,63,.3);background:var(--r-bg);border-radius:10px;}
   .kra-why.show{display:block;}
@@ -286,32 +277,32 @@ const DEFAULT_RAW = [
  ['Sales', 'Shakti Pujari', 'Revenue', [
   ['Revenue & Occupancy Achievement', 40, [['Bookings (net beds)',25,'beds / week','h','n'],['Revenue',300000,'₹ / week','h','c'],['Occupancy % (portfolio)',90,'%','h','p']]],
   ['Lead-to-Booking Conversion Efficiency', 25, [['Lead → Booking Conversion %',18,'%','h','p'],['Site Visit → Booking Conversion %',40,'%','h','p'],['Unconverted Students Converted',2,'students / week','h','n']]],
-  ['Growth Pipeline — New Inventory & B2B', 20, [['New Acquisition Opportunities (MIT, Non-MIT, WP)',6,'opportunities / week (2 each)','h','n'],['Pipeline Beds Advanced a Stage',50,'beds / week','h','n'],['B2B ACV Won',500000,'₹ / week','h','c'],['Lost Data Analysis',100,'records / week','h','n']]],
-  ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
+  ['Growth Pipeline — New Inventory & B2B', 20, [['New Acquisition Opportunities (MIT, Non-MIT, WP)',2,'opportunities / week','h','n'],['Pipeline Beds Advanced a Stage',50,'beds / week','h','n'],['B2B ACV Won',500000,'₹ / week','h','c'],['Lost Data Analysis',100,'records / week','h','n']]],
+  ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p'],['Overdue Actions (team)',2,'actions','l','n'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
  ]],
  ['Operations', 'Arindam Paul & Jayanta Panigrahi', 'EBITDA / Cost', [
-  ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 5%)',5,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs)',24,'hours','l','d'],['Repeat Complaint Rate',2,'complaints','l','n']]],
+  ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 8%)',8,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs)',24,'hours','l','d'],['Repeat Complaint Rate',2,'complaints','l','n']]],
   ['Cost and Resource Efficiency', 25, [['Budget vs Actual Variance (≤ 5%)',5,'%','l','p'],['Operation Cost per Occupied Bed (≤ ₹7,500)',7500,'₹ per bed','l','c'],['Food Cost per Bed as per Utilization (≤ ₹2,500)',2500,'₹ per bed','l','c']]],
   ['Operational Productivity & Resident Engagement', 20, [['Cost Optimisation Initiatives',1,'initiatives / week','h','n'],['AAALAY Ambassador Identification & Activation',1,'ambassadors / week','h','n'],['Operational Productivity Improvement',100,'% of plan','h','p']]],
-  ['Ops Execution & Accountability', 15, [['Daily Task — Operation Managers',100,'% completed','h','p'],['Safety Incidents',0,'incidents / week','l','n',1]]]
+  ['Ops Execution & Accountability', 15, [['Daily Task — Operation Managers',100,'% completed','h','p'],['Safety Incidents',0,'incidents / week','l','n',1],['Action Closure Rate %',90,'%','h','p']]]
  ]],
  ['Customer Experience', 'Pravin Shinde & Akash Swami', 'Customer Experience', [
-  ['Resident Satisfaction', 40, [['CSAT Score %',85,'%','h','p'],['NPS Score [Student Pulse Survey]',40,'score','h','n'],['Complaint Resolution within SLA %',90,'%','h','p']]],
+  ['Resident Satisfaction', 40, [['CSAT Score %',85,'%','h','p'],['NPS Score',40,'score','h','n'],['Complaint Resolution within SLA %',90,'%','h','p']]],
   ['Engagement & Retention', 25, [['Renewal / Retention Rate %',80,'%','h','p'],['Engagement Events Held',1,'events / week','h','n'],['Avg Response Time to Queries',4,'hours','l','d']]],
   ['Experience Growth', 20, [['New Service Initiatives Launched',1,'initiatives / week','h','n'],['Positive Reviews Generated',5,'reviews / week','h','n'],['Referrals from Residents',3,'referrals / week','h','n']]],
-  ['CX Execution & Accountability', 15, [['Ticket Closure Rate %',90,'%','h','p'],['Escalations Outstanding',2,'escalations','l','n']]]
+  ['CX Execution & Accountability', 15, [['Ticket Closure Rate %',90,'%','h','p'],['Escalations Outstanding',2,'escalations','l','n'],['Action Closure Rate %',90,'%','h','p']]]
  ]],
  ['Business Development', 'Nitesh Verma & Sanket Gaikwad', 'Expansion', [
-  ['New Business Value Generated', 40, [['New Property in Pipeline',9,'properties / week (3 each)','h','n'],['Pipeline Value Added',500000,'₹ / week','h','c'],['Deals Closed – Won',1,'deals / week','h','n']]],
+  ['New Business Value Generated', 40, [['New Property in Pipeline',3,'properties / week','h','n'],['Pipeline Value Added',500000,'₹ / week','h','c'],['Deals Closed – Won',1,'deals / week','h','n']]],
   ['Pipeline Quality & Conversion', 25, [['Opportunity → Deal Conversion %',15,'%','h','p'],['Avg Deal Cycle Time',30,'days','l','d'],['Qualified Opportunities Added',1,'opportunities / week','h','n']]],
   ['Market Expansion', 20, [['New Markets Entered',1,'markets / week','h','n'],['Strategic Tie-ups / MOUs Signed',1,'MOUs / week','h','n'],['New Acquisition Leads Sourced',5,'leads / week','h','n']]],
-  ['BD Execution & Accountability', 15, [['Follow-up SLA Adherence %',90,'%','h','p'],['CRM Hygiene Score %',90,'%','h','p']]]
+  ['BD Execution & Accountability', 15, [['Follow-up SLA Adherence %',90,'%','h','p'],['CRM Hygiene Score %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
  ]],
  ['HR', 'Monali Mule', 'People', [
   ['Talent Acquisition & Staffing', 40, [['Open Positions Filled',1,'positions / week','h','n'],['Time-to-Hire',21,'days','l','d'],['Offer Acceptance Rate %',85,'%','h','p']]],
   ['Employee Engagement & Retention', 25, [['Attrition Rate %',2,'%','l','p'],['Employee Engagement Score %',80,'%','h','p'],['Grievances Resolved within SLA %',90,'%','h','p']]],
   ['Capability & Culture Building', 20, [['Training Hours Delivered',20,'hours / week','h','n'],['New Policies / Programs Rolled Out',1,'programs / week','h','n'],['Internal Promotions / Mobility',1,'moves / week','h','n']]],
-  ['HR Execution & Accountability', 15, [['Payroll Accuracy %',100,'%','h','p',1],['Compliance Filings On-Time %',100,'%','h','p',1]]]
+  ['HR Execution & Accountability', 15, [['Payroll Accuracy %',100,'%','h','p',1],['Compliance Filings On-Time %',100,'%','h','p',1],['Action Closure Rate %',90,'%','h','p']]]
  ]],
  ['Finance', 'Arpita Nanoty', 'EBITDA / Cost', [
   ['Financial Control & Compliance', 40, [['Month-End Closing Accuracy & Timeliness (by 5th working day)',95,'%','h','p'],['Bank & Ledger Reconciliation',98,'%','h','p'],['Audit Finding / Statutory Compliance Closure (on time)',100,'%','h','p',1]]],
@@ -329,27 +320,27 @@ const DEFAULT_RAW = [
   ['Contract & Agreement Turnaround', 40, [['Agreements Closed On-Time %',90,'%','h','p'],['Avg Contract Turnaround Time',5,'days','l','d'],['Legal Disputes Resolved',1,'disputes / week','h','n']]],
   ['Risk & Compliance Management', 25, [['Compliance Checklist Adherence %',100,'%','h','p'],['Legal Risks Flagged & Mitigated',2,'risks / week','h','n'],['Litigation Cases Pending',2,'cases','l','n']]],
   ['Legal Process & Documentation Growth', 20, [['New Templates / SOPs Created',1,'templates / week','h','n'],['Properties with Clean Title / Docs %',90,'%','h','p'],['Vendor / Partner Agreements Reviewed',3,'agreements / week','h','n']]],
-  ['Legal Execution & Accountability', 15, [['Response Time to Legal Queries',24,'hours','l','d'],['Documentation Accuracy %',100,'%','h','p']]]
+  ['Legal Execution & Accountability', 15, [['Response Time to Legal Queries',24,'hours','l','d'],['Documentation Accuracy %',100,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
+ ]],
+ ['Purchase', 'Sukesh Shikhare', 'EBITDA / Cost', [
+  ['Procurement Turnaround & Delivery', 40, [['PRs Reviewed & Actioned within 24 hrs',95,'%','h','p'],['PR → PO Turnaround Time',3,'working days','l','d'],['On-Time Material Delivery',90,'%','h','p'],['Vendor Visit Follow-ups Completed vs Planned',90,'%','h','p']]],
+  ['Cost Control & Sourcing Quality', 25, [['PRs with 3 or More Quotations Compared',95,'%','h','p'],['Approval Sheets Prepared with Per-Bed Cost',100,'%','h','p'],['Negotiated Savings vs Initial Quote',5,'%','h','p']]],
+  ['Payments, Petty Cash & Expense Control', 20, [['Vendor Payment Sheet Submitted On Time',100,'%','h','p'],['Vendor Payments Released within Agreed Terms',90,'%','h','p'],['Petty Cash Reconciled with Bills',100,'%','h','p'],['Purchase Spend vs Monthly Budget Variance',5,'%','l','p']]],
+  ['Purchase Compliance, Reporting & Accountability', 15, [['Audit Queries Resolved within SLA',95,'%','h','p'],['Management Reports Submitted On Time',100,'%','h','p'],['New Items Created within 24 hrs of Request',95,'%','h','p']]]
+ ]],
+ ['Data Analytics', 'Parag Fartode', 'Management', [
+  ['Reporting Delivery & Timeliness', 40, [['Scheduled Reports / Dashboards Delivered On Time',95,'%','h','p'],['Ad-hoc Data Requests Closed within SLA (48 hrs)',90,'%','h','p'],['Dashboard Data Refreshed On Schedule',98,'%','h','p']]],
+  ['Data Quality & Accuracy', 25, [['Report Accuracy (no errors or rework)',98,'%','h','p'],['Data Quality Score of Key Datasets',95,'%','h','p'],['Data Errors Reported by Users',2,'errors / week','l','n']]],
+  ['Insights & Business Impact', 20, [['Actionable Insights Shared with Management',2,'insights / week','h','n'],['Departments Covered in Weekly KPI Review Pack',100,'%','h','p'],['New Automations / Dashboards Delivered',1,'per week','h','n']]],
+  ['Analytics Execution & Accountability', 15, [['Open Requests Older than 7 Days',2,'requests','l','n'],['Data Backup & Access Control Compliance',100,'%','h','p'],['Documentation / Data Dictionary Updated',90,'%','h','p']]]
  ]],
  ['Management', 'Uday Yadav', 'Management', [
   ['Overall Revenue & Occupancy', 40, [['Total Portfolio Revenue',1750000,'₹ / week','h','c'],['Portfolio Occupancy %',90,'%','h','p'],['Bookings vs Annual Plan %',100,'%','h','p']]],
-  ['Cross-Functional Execution', 25, [['Department Avg KRA Score %',85,'%','h','p'],['Escalations Resolved %',95,'%','h','p']]],
+  ['Cross-Functional Execution', 25, [['Department Avg KRA Score %',85,'%','h','p'],['Cross-team Action Closure Rate %',90,'%','h','p'],['Escalations Resolved %',95,'%','h','p']]],
   ['Strategic Growth', 20, [['New Properties / Markets Added',1,'per week','h','n'],['B2B / Institutional Revenue',500000,'₹ / week','h','c'],['Strategic Initiatives On-Track %',90,'%','h','p']]],
   ['Governance & Accountability', 15, [['Weekly Review Attendance / Adherence %',100,'%','h','p'],['Overdue Actions Across Departments',3,'actions','l','n'],['Compliance / Audit Score %',90,'%','h','p']]]
  ]]
 ];
-/* KPIs that are entered as three separate counts; the actual is their total.
-   Keyed by "Department|KPI name" so it works even when management saves a setup
-   from the dashboard.                                                             */
-const KPI_PARTS = {
-  'Sales|New Acquisition Opportunities (MIT, Non-MIT, WP)': { parts:['MIT','Non-MIT','WP'], each:2 },
-  'Business Development|New Property in Pipeline':          { parts:['MIT','Non-MIT','WP'], each:3 }
-};
-function partsOf(dept, kpiName){
-  const L = (typeof LIB !== 'undefined' && LIB[dept]) ? LIB[dept] : null;
-  const base = L && L.dept ? L.dept : dept;                       // a split department uses its base name
-  return KPI_PARTS[base + '|' + kpiName] || KPI_PARTS[dept + '|' + kpiName] || null;
-}
 const DIR_MAP = {h:'higher', l:'lower', t:'target', b:'binary'};
 function buildDefaultConfig(){
   return {
@@ -629,15 +620,9 @@ function buildKpis(dept){
       const id = 'k' + ki + '_' + kj;
       const row = document.createElement('div');
       row.className = 'kpi'; row.dataset.ki = ki; row.dataset.kj = kj;
-      const ps = partsOf(dept, k.name);
-      const input = ps
-        ? '<div class="parts">' + ps.parts.map((lbl, pi) =>
-            '<div class="pb"><span>' + esc(lbl) + '<i>' + ps.each + '</i></span>' +
-            '<input class="part" id="' + id + '_p' + pi + '" data-part="' + esc(lbl) + '" type="number" step="1" min="0" inputmode="numeric" aria-label="' + esc(lbl) + ' for ' + esc(k.name) + '"></div>').join('') +
-          '</div><div class="tot"><span>Total</span><input class="act total" id="' + id + '" type="number" readonly tabindex="-1" placeholder="0" aria-label="Total for ' + esc(k.name) + '"></div>'
-        : (k.type === 'y' || k.better === 'binary')
-          ? '<select class="act" id="' + id + '" aria-label="Actual for ' + esc(k.name) + '"><option value="">Select</option><option>Yes</option><option>No</option></select>'
-          : '<input class="act" id="' + id + '" type="number" step="any" min="0" inputmode="decimal" placeholder="Actual' + (k.type === 'p' ? ' %' : '') + '" aria-label="Actual for ' + esc(k.name) + '">';
+      const input = (k.type === 'y' || k.better === 'binary')
+        ? '<select class="act" id="' + id + '" aria-label="Actual for ' + esc(k.name) + '"><option value="">Select</option><option>Yes</option><option>No</option></select>'
+        : '<input class="act" id="' + id + '" type="number" step="any" min="0" inputmode="decimal" placeholder="Actual' + (k.type === 'p' ? ' %' : '') + '" aria-label="Actual for ' + esc(k.name) + '">';
       row.innerHTML =
         '<div class="info"><div class="nm">' + esc(k.name) + (k.nn ? '<span class="nn">Non-negotiable</span>' : '') + '</div>' +
         '<div class="tg">Target <b>' + esc(fmtTarget(k)) + '</b> · ' + dirText(k) + '</div><div class="last"></div></div>' +
@@ -655,31 +640,12 @@ function buildKpis(dept){
     const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm');
     act.addEventListener('input', () => updateRow(row));
     act.addEventListener('change', () => updateRow(row));
-    const parts = [...row.querySelectorAll('.part')];
-    parts.forEach(pi => pi.addEventListener('input', () => { syncParts(row); updateRow(row); }));
-    na.addEventListener('change', () => {
-      act.disabled = na.checked; parts.forEach(pi => { pi.disabled = na.checked; if (na.checked) pi.value = ''; });
-      if (na.checked) act.value = ''; else syncParts(row);
-      updateRow(row);
-    });
+    na.addEventListener('change', () => { act.disabled = na.checked; if (na.checked) act.value = ''; updateRow(row); });
     cm.addEventListener('change', () => { row.classList.toggle('show-cmt', cm.checked); if (cm.checked) setTimeout(() => row.querySelector('.cm-in').focus(), 30); });
   });
   restoreDraft();
-  document.querySelectorAll('.kpi').forEach(row => { row.classList.toggle('show-cmt', row.querySelector('.cm').checked); syncParts(row); updateRow(row); });
+  document.querySelectorAll('.kpi').forEach(row => { row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
   refreshHistoryHints();
-}
-/* total of the MIT / Non-MIT / WP boxes goes into the normal "actual" field */
-function syncParts(row){
-  const parts = [...row.querySelectorAll('.part')];
-  if (!parts.length) return;
-  const act = row.querySelector('.act');
-  const filled = parts.filter(p => p.value !== '');
-  act.value = filled.length ? filled.reduce((a, p) => a + (parseFloat(p.value) || 0), 0) : '';
-}
-function partText(row){
-  const parts = [...row.querySelectorAll('.part')];
-  if (!parts.length) return '';
-  return parts.map(p => p.dataset.part + ': ' + (p.value === '' ? '0' : p.value)).join(' | ');
 }
 function kpiOf(row){ return LIB[deptSel.value].kras[row.dataset.ki].kpis[row.dataset.kj]; }
 function rowResult(row){
@@ -849,7 +815,7 @@ function collectPayload(){
       kra: kra.name, kraWeight: kra.weight, kraScore: s === null ? '' : s.toFixed(1), kraStatus: s === null ? 'Not Applicable' : RAG_LABEL[ragOf(s)],
       kraRemark: $('kra_w_' + ki).classList.contains('show') ? $('kra_r_' + ki).value.trim() : '',
       kpi: r.k.name, target: r.k.target, unit: r.k.unit, better: r.k.better, nonNegotiable: r.k.nn ? 'Yes' : 'No',
-      actual: r.val, actualBreakup: partText(rows[i]), achievementPct: r.ach === null ? '' : r.ach.toFixed(1),
+      actual: r.val, achievementPct: r.ach === null ? '' : r.ach.toFixed(1),
       status: r.na ? 'Not Applicable' : RAG_LABEL[r.rag],
       remarks: rows[i].querySelector('.why-in').value.trim(),
       kpiComment: r.comment
