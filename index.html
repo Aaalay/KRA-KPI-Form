@@ -79,6 +79,14 @@
   .cmt label{font-size:.78rem;margin:6px 0 4px;color:var(--blue-dark);}
   .cmt input{border-color:rgba(42,95,224,.35);}
   .kpi.is-na{opacity:.8;}
+  .kpi .parts{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;}
+  .kpi .parts label{display:flex;flex-direction:column;gap:3px;width:150px;font-size:.76rem;font-weight:600;color:var(--slate);}
+  .kpi .parts label small{font-weight:500;}
+  .kpi .parts-note{font-size:.74rem;color:var(--slate);padding-bottom:11px;}
+  .kpi .act.calc{font-weight:700;cursor:default;background:transparent;}
+  .notice.locked{background:var(--r-bg,#FBEAE9);color:var(--r);border-color:var(--r);}
+  .notice.editing{background:var(--g-bg,#E7F6EF);color:var(--g);border-color:var(--g);}
+  input:disabled,select:disabled,textarea:disabled{opacity:.75;cursor:not-allowed;}
   @media (max-width:720px){
     .kpi{grid-template-columns:1fr 1fr;}
     .kpi > .info{grid-column:1 / -1;}
@@ -151,7 +159,7 @@
 
   <section class="card" id="sect1">
     <h2><span class="num">1</span> Report details</h2>
-    <p class="hint">Only completed weeks of <span id="fyText"></span> can be selected. The latest option is last week.</p>
+    <p class="hint">Only completed weeks of <span id="fyText"></span> can be selected. The latest option is last week. A submitted week can be corrected until the end of the following week (Sunday); after that it is locked.</p>
     <div class="grid3">
       <div class="field">
         <label class="req" for="department">Department</label>
@@ -252,7 +260,7 @@
 <script>
 /* Google Apps Script Web App URL */
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VFDtukwbl5MfkfzCkWhnotK77DlCS7yYQE8SbM0_qnzolrwKzkK99GjQ/exec";
-const FORM_VERSION = '4.0';
+const FORM_VERSION = '5.0';
 
 /* =====================================================================
    SHARED CONFIGURATION — identical block in the Form and the Dashboard.
@@ -277,32 +285,32 @@ const DEFAULT_RAW = [
  ['Sales', 'Shakti Pujari', 'Revenue', [
   ['Revenue & Occupancy Achievement', 40, [['Bookings (net beds)',25,'beds / week','h','n'],['Revenue',300000,'₹ / week','h','c'],['Occupancy % (portfolio)',90,'%','h','p']]],
   ['Lead-to-Booking Conversion Efficiency', 25, [['Lead → Booking Conversion %',18,'%','h','p'],['Site Visit → Booking Conversion %',40,'%','h','p'],['Unconverted Students Converted',2,'students / week','h','n']]],
-  ['Growth Pipeline — New Inventory & B2B', 20, [['New Acquisition Opportunities (MIT, Non-MIT, WP)',2,'opportunities / week','h','n'],['Pipeline Beds Advanced a Stage',50,'beds / week','h','n'],['B2B ACV Won',500000,'₹ / week','h','c'],['Lost Data Analysis',100,'records / week','h','n']]],
-  ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p'],['Overdue Actions (team)',2,'actions','l','n'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
+  ['Growth Pipeline — New Inventory & B2B', 20, [['New Acquisition Opportunities (MIT, Non-MIT, WP)',6,'opportunities / week','h','n'],['Pipeline Beds Advanced a Stage',50,'beds / week','h','n'],['B2B ACV Won',500000,'₹ / week','h','c'],['Lost Data Analysis',100,'records / week','h','n']]],
+  ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
  ]],
  ['Operations', 'Arindam Paul & Jayanta Panigrahi', 'EBITDA / Cost', [
-  ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 8%)',8,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs)',24,'hours','l','d'],['Repeat Complaint Rate',2,'complaints','l','n']]],
+  ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 5%)',5,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs) & Repeat Complaint Rate',100,'% combined score','h','p'],['Weekly Audit Score',90,'%','h','p']]],
   ['Cost and Resource Efficiency', 25, [['Budget vs Actual Variance (≤ 5%)',5,'%','l','p'],['Operation Cost per Occupied Bed (≤ ₹7,500)',7500,'₹ per bed','l','c'],['Food Cost per Bed as per Utilization (≤ ₹2,500)',2500,'₹ per bed','l','c']]],
   ['Operational Productivity & Resident Engagement', 20, [['Cost Optimisation Initiatives',1,'initiatives / week','h','n'],['AAALAY Ambassador Identification & Activation',1,'ambassadors / week','h','n'],['Operational Productivity Improvement',100,'% of plan','h','p']]],
-  ['Ops Execution & Accountability', 15, [['Daily Task — Operation Managers',100,'% completed','h','p'],['Safety Incidents',0,'incidents / week','l','n',1],['Action Closure Rate %',90,'%','h','p']]]
+  ['Ops Execution & Accountability', 15, [['Daily Task — Operation Managers',100,'% completed','h','p'],['Safety Incidents',0,'incidents / week','l','n',1]]]
  ]],
  ['Customer Experience', 'Pravin Shinde & Akash Swami', 'Customer Experience', [
-  ['Resident Satisfaction', 40, [['CSAT Score %',85,'%','h','p'],['NPS Score',40,'score','h','n'],['Complaint Resolution within SLA %',90,'%','h','p']]],
+  ['Resident Satisfaction', 40, [['CSAT Score %',85,'%','h','p'],['NPS Score [Student Pulse Survey]',40,'score','h','n'],['Complaint Resolution within SLA %',90,'%','h','p']]],
   ['Engagement & Retention', 25, [['Renewal / Retention Rate %',80,'%','h','p'],['Engagement Events Held',1,'events / week','h','n'],['Avg Response Time to Queries',4,'hours','l','d']]],
   ['Experience Growth', 20, [['New Service Initiatives Launched',1,'initiatives / week','h','n'],['Positive Reviews Generated',5,'reviews / week','h','n'],['Referrals from Residents',3,'referrals / week','h','n']]],
-  ['CX Execution & Accountability', 15, [['Ticket Closure Rate %',90,'%','h','p'],['Escalations Outstanding',2,'escalations','l','n'],['Action Closure Rate %',90,'%','h','p']]]
+  ['CX Execution & Accountability', 15, [['Ticket Closure Rate %',90,'%','h','p'],['Escalations Outstanding',2,'escalations','l','n']]]
  ]],
  ['Business Development', 'Nitesh Verma & Sanket Gaikwad', 'Expansion', [
-  ['New Business Value Generated', 40, [['New Property in Pipeline',3,'properties / week','h','n'],['Pipeline Value Added',500000,'₹ / week','h','c'],['Deals Closed – Won',1,'deals / week','h','n']]],
+  ['New Business Value Generated', 40, [['New Property in Pipeline',9,'properties / week','h','n'],['Pipeline Value Added',500000,'₹ / week','h','c'],['Deals Closed – Won',1,'deals / week','h','n']]],
   ['Pipeline Quality & Conversion', 25, [['Opportunity → Deal Conversion %',15,'%','h','p'],['Avg Deal Cycle Time',30,'days','l','d'],['Qualified Opportunities Added',1,'opportunities / week','h','n']]],
   ['Market Expansion', 20, [['New Markets Entered',1,'markets / week','h','n'],['Strategic Tie-ups / MOUs Signed',1,'MOUs / week','h','n'],['New Acquisition Leads Sourced',5,'leads / week','h','n']]],
-  ['BD Execution & Accountability', 15, [['Follow-up SLA Adherence %',90,'%','h','p'],['CRM Hygiene Score %',90,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
+  ['BD Execution & Accountability', 15, [['Follow-up SLA Adherence %',90,'%','h','p'],['CRM Hygiene Score %',90,'%','h','p']]]
  ]],
  ['HR', 'Monali Mule', 'People', [
   ['Talent Acquisition & Staffing', 40, [['Open Positions Filled',1,'positions / week','h','n'],['Time-to-Hire',21,'days','l','d'],['Offer Acceptance Rate %',85,'%','h','p']]],
   ['Employee Engagement & Retention', 25, [['Attrition Rate %',2,'%','l','p'],['Employee Engagement Score %',80,'%','h','p'],['Grievances Resolved within SLA %',90,'%','h','p']]],
   ['Capability & Culture Building', 20, [['Training Hours Delivered',20,'hours / week','h','n'],['New Policies / Programs Rolled Out',1,'programs / week','h','n'],['Internal Promotions / Mobility',1,'moves / week','h','n']]],
-  ['HR Execution & Accountability', 15, [['Payroll Accuracy %',100,'%','h','p',1],['Compliance Filings On-Time %',100,'%','h','p',1],['Action Closure Rate %',90,'%','h','p']]]
+  ['HR Execution & Accountability', 15, [['Payroll Accuracy %',100,'%','h','p',1],['Compliance Filings On-Time %',100,'%','h','p',1]]]
  ]],
  ['Finance', 'Arpita Nanoty', 'EBITDA / Cost', [
   ['Financial Control & Compliance', 40, [['Month-End Closing Accuracy & Timeliness (by 5th working day)',95,'%','h','p'],['Bank & Ledger Reconciliation',98,'%','h','p'],['Audit Finding / Statutory Compliance Closure (on time)',100,'%','h','p',1]]],
@@ -320,7 +328,7 @@ const DEFAULT_RAW = [
   ['Contract & Agreement Turnaround', 40, [['Agreements Closed On-Time %',90,'%','h','p'],['Avg Contract Turnaround Time',5,'days','l','d'],['Legal Disputes Resolved',1,'disputes / week','h','n']]],
   ['Risk & Compliance Management', 25, [['Compliance Checklist Adherence %',100,'%','h','p'],['Legal Risks Flagged & Mitigated',2,'risks / week','h','n'],['Litigation Cases Pending',2,'cases','l','n']]],
   ['Legal Process & Documentation Growth', 20, [['New Templates / SOPs Created',1,'templates / week','h','n'],['Properties with Clean Title / Docs %',90,'%','h','p'],['Vendor / Partner Agreements Reviewed',3,'agreements / week','h','n']]],
-  ['Legal Execution & Accountability', 15, [['Response Time to Legal Queries',24,'hours','l','d'],['Documentation Accuracy %',100,'%','h','p'],['Action Closure Rate %',90,'%','h','p']]]
+  ['Legal Execution & Accountability', 15, [['Response Time to Legal Queries',24,'hours','l','d'],['Documentation Accuracy %',100,'%','h','p']]]
  ]],
  ['Purchase', 'Sukesh Shikhare', 'EBITDA / Cost', [
   ['Procurement Turnaround & Delivery', 40, [['PRs Reviewed & Actioned within 24 hrs',95,'%','h','p'],['PR → PO Turnaround Time',3,'working days','l','d'],['On-Time Material Delivery',90,'%','h','p'],['Vendor Visit Follow-ups Completed vs Planned',90,'%','h','p']]],
@@ -359,10 +367,59 @@ function validConfig(c){
       d.kras.every(k => k && k.name && Array.isArray(k.kpis) && k.kpis.length && k.kpis.every(p => p && p.name))));
   } catch(e){ return false; }
 }
+/* =====================================================================
+   KPI REVISION — 9 Oct 2026 (identical block in the Form and the Dashboard)
+   The built-in list above already contains these changes. reviseConfig() applies the same
+   changes to a KPI setup that was saved in the Google Sheet BEFORE this revision, so the
+   form and dashboard never fall back to the old list. A setup saved by management on or
+   after KPI_REVISION is used exactly as saved.
+===================================================================== */
+const KPI_REVISION = '2026-10-10';
+const MERGED_COMPLAINT_KPI = 'Complaint Resolution Time (≤ 24 hrs) & Repeat Complaint Rate';
+/* old KPI name -> new KPI name (history of the old name continues under the new one) */
+const KPI_RENAMES = {
+  'Customer Experience|NPS Score': 'NPS Score [Student Pulse Survey]',
+  'Operations|Residence Pulse Score Weightage (≤ 8%)': 'Residence Pulse Score Weightage (≤ 5%)'
+};
+/* KPIs entered in several boxes in the form.
+   sum: the boxes are added up and the total is the actual (KPI target = per-box target × number of boxes)
+   avg: each box is scored against its own target and the average score % is the actual (KPI target = 100) */
+const MULTI_KPI = {
+  'Sales|New Acquisition Opportunities (MIT, Non-MIT, WP)': { mode:'sum', parts:[{label:'MIT'},{label:'Non-MIT'},{label:'WP'}] },
+  'Business Development|New Property in Pipeline': { mode:'sum', parts:[{label:'MIT'},{label:'Non-MIT'},{label:'WP'}] },
+  ['Operations|' + MERGED_COMPLAINT_KPI]: { mode:'avg', parts:[
+    { label:'Resolution time (hrs)', target:24, better:'lower', was:'Complaint Resolution Time (≤ 24 hrs)' },
+    { label:'Repeat complaints', target:2, better:'lower', was:'Repeat Complaint Rate' }] }
+};
+function reviseConfig(cfg){
+  const saved = cfg.savedAt ? String(cfg.savedAt).slice(0, 10) : '';
+  if (saved && saved >= KPI_REVISION) return cfg;
+  cfg.depts.forEach(d => {
+    d.kras.forEach(k => {
+      k.kpis = k.kpis.filter(p => p.name !== 'Action Closure Rate %' && !(d.name === 'Sales' && p.name === 'Overdue Actions (team)'));
+      k.kpis.forEach(p => {
+        const to = KPI_RENAMES[d.name + '|' + p.name];
+        if (to){ p.name = to; if (d.name === 'Operations') p.target = 5; }
+        if (d.name === 'Sales' && p.name === 'New Acquisition Opportunities (MIT, Non-MIT, WP)' && +p.target === 2) p.target = 6;
+        if (d.name === 'Business Development' && p.name === 'New Property in Pipeline' && +p.target === 3) p.target = 9;
+      });
+      if (d.name === 'Operations'){
+        const i = k.kpis.findIndex(p => p.name === 'Complaint Resolution Time (≤ 24 hrs)');
+        if (i > -1){
+          k.kpis[i] = { name: MERGED_COMPLAINT_KPI, target:100, unit:'% combined score', better:'higher', type:'p', nn:false };
+          k.kpis = k.kpis.filter(p => p.name !== 'Repeat Complaint Rate');
+          if (!k.kpis.some(p => p.name === 'Weekly Audit Score')) k.kpis.push({ name:'Weekly Audit Score', target:90, unit:'%', better:'higher', type:'p', nn:false });
+        }
+      }
+    });
+    d.kras = d.kras.filter(k => k.kpis.length);
+  });
+  return cfg;
+}
 let CFG = null, RAG = null, LIB = {}, DEPTS = [], KPI_INDEX = {};
 function applyConfig(cfg){
   if (!validConfig(cfg)) cfg = buildDefaultConfig();
-  CFG = JSON.parse(JSON.stringify(cfg));
+  CFG = reviseConfig(JSON.parse(JSON.stringify(cfg)));
   RAG = Object.assign({ green:90, amber:70, cap:120 }, CFG.rag || {});
   RAG.green = +RAG.green; RAG.amber = +RAG.amber; RAG.cap = +RAG.cap || 120;
   LIB = {}; KPI_INDEX = {};
@@ -371,7 +428,7 @@ function applyConfig(cfg){
     LIB[d.name] = { heads, owner: heads.join(' & '), cat: d.cat || 'Management',
       kras: d.kras.map(k => ({ name:k.name, weight: isNaN(+k.weight) ? 25 : +k.weight,
         kpis: k.kpis.map(p => { const o = { name:p.name, target: +p.target || 0, unit: p.unit || '', better: p.better || 'higher', type: p.type || 'n', nn: !!p.nn, weight:1, dept:d.name, kra:k.name };
-          KPI_INDEX[d.name + '|' + p.name] = o; return o; }) })) };
+          o.multi = MULTI_KPI[d.name + '|' + p.name] || null; KPI_INDEX[d.name + '|' + p.name] = o; return o; }) })) };
   });
   DEPTS = Object.keys(LIB);
 }
@@ -544,7 +601,7 @@ function refreshDue(){
   if (!w){ b.textContent = ''; return; }
   const due = dueDateOf(w), today = todayISO();
   const done = deptSel.value && HISTORY && historyFor(deptSel.value, w.to).length;
-  if (done){ b.className = 'due ok'; b.textContent = deptSel.value + ' has already submitted for this week'; return; }
+  if (done){ b.className = 'due ok'; b.textContent = deptSel.value + ' has already submitted for this week' + (weekOpen(w) ? ' — editable until ' + fmtDate(editDeadline(w), false) : ' — locked'); return; }
   if (today > due){ b.className = 'due late'; b.textContent = 'Overdue — this week was due on Monday ' + fmtDate(due) + '. Submit now.'; }
   else { b.className = 'due'; b.textContent = 'Due today: Monday ' + fmtDate(due) + ' for ' + fmtDate(w.from, false) + ' – ' + fmtDate(w.to); }
 }
@@ -572,8 +629,15 @@ function setOwner(dept){
     $('ownerLbl').textContent = 'Submitted by (select head)';
   }
   if (!$('actionOwner').value) $('actionOwner').value = heads.length === 1 ? heads[0] : '';
+  PREV_OWNER = ownerSel.value;
 }
-ownerSel.addEventListener('change', () => { if (!$('actionOwner').value || headsOf(deptSel.value).includes($('actionOwner').value)) $('actionOwner').value = ownerSel.value; saveDraft(); });
+let PREV_OWNER = '';
+ownerSel.addEventListener('change', () => {
+  if (!$('actionOwner').value || headsOf(deptSel.value).includes($('actionOwner').value)) $('actionOwner').value = ownerSel.value;
+  if (!PREV_OWNER && !LOCKED) saveDraft();          /* entries typed before the head was chosen move to that head */
+  PREV_OWNER = ownerSel.value;
+  if (deptSel.value) buildKpis(deptSel.value);      /* each head has their own submission, draft and lock */
+});
 
 /* ---------------- previous submissions (last week's actuals + duplicate check) ---------------- */
 function loadHistory(dept){
@@ -584,23 +648,122 @@ function loadHistory(dept){
     refreshHistoryHints();
   });
 }
-function historyFor(dept, toDate){ return (HISTORY || []).filter(r => r.department === dept && toISODate(r.toDate) === toDate); }
+/* ---------- tolerant readers for rows coming back from the sheet ---------- */
+const nrm = s => String(s === undefined || s === null ? '' : s).toLowerCase().replace(/[^a-z0-9]/g, '');
+function fv(r, ...names){
+  for (const n of names) if (r[n] !== undefined && r[n] !== null) return r[n];
+  const m = {}; Object.keys(r).forEach(k => m[nrm(k)] = r[k]);
+  for (const n of names){ const v = m[nrm(n)]; if (v !== undefined && v !== null) return v; }
+  return '';
+}
+function sameOwner(a, b){
+  const x = nrm(a), y = nrm(b); if (!x || !y) return false;
+  const first = nrm(String(b).trim().split(/\s+/)[0]);
+  return x === y || (first && x.indexOf(first) === 0);
+}
+/* a department with more than one head has one submission PER HEAD */
+function rowsFor(rows, dept, toDate, owner){
+  const shared = LIB[dept] && LIB[dept].heads.length > 1;
+  return (rows || []).filter(r => fv(r, 'department') === dept && toISODate(fv(r, 'toDate')) === toDate && (!shared || sameOwner(fv(r, 'submissionOwner', 'submittedBy'), owner)));
+}
+function historyFor(dept, toDate, owner){ return rowsFor(HISTORY, dept, toDate, owner === undefined ? ownerSel.value : owner); }
+function kpiMatches(name, k){ name = String(name || '').trim(); return name === k.name || KPI_RENAMES[k.dept + '|' + name] === k.name; }
+function latestSubmission(rows){
+  let best = null, bestT = -Infinity;
+  rows.forEach((r, i) => { const t = (Date.parse(fv(r, 'timestamp')) || 0) + i / 1e6; if (t >= bestT){ bestT = t; best = r; } });
+  const sid = best ? rowSid(best) : '';
+  return sid ? rows.filter(r => rowSid(r) === sid) : rows;
+}
+
+/* ================= edit window & lock =================
+   A week can be submitted / corrected until the Sunday of the FOLLOWING week.
+   From the next Monday a submitted week is locked (read-only). */
+let STATE = 'new', LOCKED = false, REBUILDING = false, PREFILLED = '', ORIG_DUE = '';
+function editDeadline(w){ return fromDayNum(dayNum(w.to) + 7); }
+function weekOpen(w){ return todayISO() <= editDeadline(w); }
+function setLocked(on){
+  LOCKED = on;
+  document.querySelectorAll('#sect2 input, #sect2 select, #sect2 textarea, #sect3 input, #sect3 select, #sect3 textarea').forEach(el => { el.disabled = on; });
+  $('submitBtn').style.display = on ? 'none' : '';
+}
+function formIsEmpty(){
+  return ![...document.querySelectorAll('#kraContainer .act, #kraContainer .part')].some(el => el.value) &&
+         ![...document.querySelectorAll('#kraContainer .na')].some(el => el.checked) &&
+         !$('keyAchievements').value.trim() && !$('nextWeekPriorities').value.trim();
+}
+function prefillFrom(rows){
+  const dept = deptSel.value, first = rows[rows.length - 1];
+  document.querySelectorAll('.kpi').forEach(row => {
+    const k = kpiOf(row), r = rows.filter(x => kpiMatches(fv(x, 'kpi'), k)).pop();
+    const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm'), ins = [...row.querySelectorAll('.part')];
+    let comment = '';
+    act.value = ''; na.checked = false; ins.forEach(i => i.value = ''); row.querySelector('.why-in').value = '';
+    if (r){
+      const a = String(fv(r, 'actual')).trim();
+      const m = String(fv(r, 'kpiComment')).match(/^\[([^\]]*)\]\s*([\s\S]*)$/);
+      comment = m ? m[2] : String(fv(r, 'kpiComment'));
+      na.checked = a === '' || /^n\/?a$/i.test(a) || fv(r, 'status') === 'Not Applicable';
+      if (!na.checked){
+        if (!k.multi) act.value = a;
+        else if (m) m[1].split('·').forEach((s, i) => { const n = s.match(/(-?\d+(?:\.\d+)?)\D*$/); if (n && ins[i]) ins[i].value = n[1]; });
+      }
+      row.querySelector('.why-in').value = fv(r, 'remarks', 'remark');
+    } else if (k.multi && k.multi.mode === 'avg'){        /* submitted with the two separate KPIs before they were merged */
+      k.multi.parts.forEach((p, i) => { const o = rows.filter(x => String(fv(x, 'kpi')).trim() === p.was).pop(); if (o && ins[i] && !isNaN(parseFloat(fv(o, 'actual')))) ins[i].value = parseFloat(fv(o, 'actual')); });
+    }
+    cm.checked = !!comment; row.querySelector('.cm-in').value = comment;
+    syncNA(row); calcParts(row); row.classList.toggle('show-cmt', cm.checked);
+  });
+  LIB[dept].kras.forEach((kra, ki) => { const r = rows.filter(x => fv(x, 'kra') === kra.name && String(fv(x, 'kraRemark')).trim()).pop(); $('kra_r_' + ki).value = r ? fv(r, 'kraRemark') : ''; });
+  $('keyAchievements').value = fv(first, 'keyAchievements'); $('nextWeekPriorities').value = fv(first, 'nextWeekPriorities');
+  $('keyChallenges').value = fv(first, 'keyChallenges'); $('correctiveAction').value = fv(first, 'correctiveAction');
+  $('actionOwner').value = fv(first, 'actionOwner'); $('supportRequired').value = fv(first, 'supportRequired');
+  ORIG_DUE = toISODate(fv(first, 'actionDueDate')); $('actionDue').value = ORIG_DUE;
+  $('criticalIssueDetails').value = fv(first, 'criticalIssueDetails');
+  const cr = document.querySelector('input[name="criticalIssue"][value="' + (fv(first, 'criticalIssue') === 'Yes' ? 'Yes' : 'No') + '"]');
+  cr.checked = true; $('criticalDetails').style.display = cr.value === 'Yes' ? 'block' : 'none';
+  document.querySelectorAll('.kpi').forEach(updateRow);
+}
+function applySubmissionState(){
+  const dept = deptSel.value, w = selectedWeek(), note = $('dupNotice');
+  note.classList.remove('show', 'locked', 'editing');
+  if (!dept || !w || !HISTORY) return;
+  const subs = historyFor(dept, w.to), open = weekOpen(w);
+  const next = !subs.length ? 'new' : open ? 'edit' : 'locked';
+  const key = dept + '|' + ownerSel.value + '|' + w.to + '|' + next;
+  const until = WEEKDAYS[new Date(dayNum(editDeadline(w)) * 864e5).getUTCDay()] + ' ' + fmtDate(editDeadline(w));
+  let shown = PREFILLED === key;
+  if (next !== 'new' && PREFILLED !== key && (next === 'locked' || formIsEmpty())){ prefillFrom(latestSubmission(subs)); PREFILLED = key; shown = true; }
+  if (next === 'locked' && !LOCKED) setLocked(true);
+  STATE = next;
+  $('submitBtn').textContent = next === 'edit' ? 'Update weekly review' : 'Submit weekly review';
+  if (next === 'new'){
+    if (!open){ note.innerHTML = 'This week was due on Monday ' + fmtDate(dueDateOf(w)) + ' and was never submitted. You can still submit it once — it <b>cannot be edited afterwards</b>.'; note.classList.add('show'); }
+    return;
+  }
+  const last = latestSubmission(subs).pop(), by = fv(last, 'submissionOwner', 'submittedBy'), on = toISODate(fv(last, 'timestamp'));
+  const who = '<b>' + esc(dept) + '</b> was submitted for this week' + (on ? ' on ' + fmtDate(on) : '') + (by ? ' by ' + esc(by) : '') + '.';
+  if (next === 'edit'){
+    note.innerHTML = who + (shown ? ' The submitted figures are loaded below — correct what you need and press <b>Update weekly review</b>.' : ' Your unsaved changes on this device are shown below.') +
+      ' You can edit until <b>' + until + '</b>; after that this week is locked. The update replaces the earlier entry on the dashboard.';
+    note.classList.add('show', 'editing');
+    $('draftNote').textContent = 'Editing your submitted review — changes are saved on this device until you update.';
+  } else {
+    note.innerHTML = '<b>Locked.</b> ' + who + ' The edit window closed on ' + until + ', so the figures below are read-only. If a correction is needed, ask management to edit it from the dashboard.';
+    note.classList.add('show', 'locked');
+  }
+}
+
 function refreshHistoryHints(){
   refreshDue();
   const dept = deptSel.value, w = selectedWeek();
-  const note = $('dupNotice');
-  if (!dept || !w || !HISTORY){ note.classList.remove('show'); return; }
-  const same = historyFor(dept, w.to);
-  if (same.length){
-    const last = same[same.length - 1];
-    note.innerHTML = '<b>' + esc(dept) + '</b> has already submitted this week' + (last.submissionOwner ? ' (by ' + esc(last.submissionOwner) + ')' : '') + '. If you submit again, the new entry replaces the earlier one on the dashboard.';
-    note.classList.add('show');
-  } else note.classList.remove('show');
+  applySubmissionState();
+  if (!dept || !w || !HISTORY) return;
   const prevTo = fromDayNum(dayNum(w.from) - 1);
   const prev = historyFor(dept, prevTo);
   document.querySelectorAll('.kpi').forEach(row => {
     const k = kpiOf(row), el = row.querySelector('.last');
-    const p = prev.filter(r => r.kpi === k.name).pop();
+    const p = prev.filter(r => kpiMatches(fv(r, 'kpi'), k)).pop();
     if (!p || p.actual === '' || p.actual === undefined){ el.textContent = ''; return; }
     const a = String(p.actual).toUpperCase() === 'NA' ? null : achievement(k, p.actual);
     el.innerHTML = 'Previous week: <b>' + esc(p.actual) + '</b>' + (a === null ? '' : ' <span style="color:var(--' + ragOf(a).toLowerCase() + ')">(' + a.toFixed(0) + '%)</span>');
@@ -609,9 +772,11 @@ function refreshHistoryHints(){
 
 /* ---------------- KPI section ---------------- */
 function buildKpis(dept){
+  setLocked(false); STATE = 'new'; PREFILLED = ''; ORIG_DUE = '';
+  $('draftNote').textContent = 'Your entries are saved on this device until you submit.';
   const d = LIB[dept];
   $('ownerText').innerHTML = 'Department head: <b>' + esc(d.owner) + '</b> · ' + d.kras.length + ' KRAs';
-  const box = $('kraContainer'); box.innerHTML = '';
+  const box = $('kraContainer'); REBUILDING = true; box.innerHTML = ''; REBUILDING = false;   /* removing a focused box fires a late change event */
   d.kras.forEach((kra, ki) => {
     const wrap = document.createElement('div'); wrap.className = 'kra';
     wrap.innerHTML = '<div class="kra-title"><span>KRA ' + (ki+1) + ': ' + esc(kra.name) + '<span class="w">Weight ' + kra.weight + '%</span></span><small id="kra_s_' + ki + '"></small></div>' +
@@ -623,13 +788,24 @@ function buildKpis(dept){
       const input = (k.type === 'y' || k.better === 'binary')
         ? '<select class="act" id="' + id + '" aria-label="Actual for ' + esc(k.name) + '"><option value="">Select</option><option>Yes</option><option>No</option></select>'
         : '<input class="act" id="' + id + '" type="number" step="any" min="0" inputmode="decimal" placeholder="Actual' + (k.type === 'p' ? ' %' : '') + '" aria-label="Actual for ' + esc(k.name) + '">';
+      const parts = k.multi ? partDefs(k) : null, isSum = k.multi && k.multi.mode === 'sum';
+      const actCell = !parts ? input
+        : '<input class="act calc" id="' + id + '" type="number" step="any" readonly tabindex="-1" placeholder="' + (isSum ? 'Total' : 'Score %') + '" aria-label="' + (isSum ? 'Total' : 'Combined score') + ' for ' + esc(k.name) + ' (calculated)">';
+      const partsHtml = !parts ? '' : '<div class="parts">' + parts.map((p, pi) =>
+          '<label>' + esc(p.label) + ' <small>target ' + (p.better === 'lower' ? '≤ ' : '') + fmtNum(p.target) + '</small>' +
+          '<input type="number" class="part" id="' + id + '_p' + pi + '" step="any" min="0" inputmode="decimal" placeholder="' + esc(p.label) + '"></label>').join('') +
+        '<span class="parts-note">' + (isSum ? 'Fill all ' + parts.length + ' boxes — the total is added up automatically.' : 'Fill both boxes — the score is the average of the two achievements.') + '</span></div>';
+      const tgHtml = !parts ? 'Target <b>' + esc(fmtTarget(k)) + '</b> · ' + dirText(k)
+        : isSum ? 'Target <b>' + esc(fmtTarget(k)) + '</b> · ' + fmtNum(parts[0].target) + ' each for ' + esc(parts.map(p => p.label).join(', ')) + ' · ' + dirText(k)
+        : 'Target ' + parts.map(p => '<b>' + (p.better === 'lower' ? '≤ ' : '') + fmtNum(p.target) + '</b> ' + esc(p.label.toLowerCase())).join(' and ') + ' · lower is better';
       row.innerHTML =
         '<div class="info"><div class="nm">' + esc(k.name) + (k.nn ? '<span class="nn">Non-negotiable</span>' : '') + '</div>' +
-        '<div class="tg">Target <b>' + esc(fmtTarget(k)) + '</b> · ' + dirText(k) + '</div><div class="last"></div></div>' +
-        '<div>' + input + '</div>' +
+        '<div class="tg">' + tgHtml + '</div><div class="last"></div></div>' +
+        '<div>' + actCell + '</div>' +
         '<div class="chip" id="' + id + '_c">—</div>' +
         '<label class="tick cm-toggle" title="Add a comment on this figure"><input type="checkbox" class="cm" id="' + id + '_cm"> Comment</label>' +
         '<label class="tick na-toggle"><input type="checkbox" class="na" id="' + id + '_na"> N/A</label>' +
+        partsHtml +
         '<div class="cmt"><label for="' + id + '_ct">Comment on this count (optional)</label><input type="text" class="cm-in" id="' + id + '_ct" placeholder="e.g. includes 2 walk-in bookings from last month"></div>' +
         '<div class="why"><label for="' + id + '_w" class="why-lbl">Remark: reason for gap &amp; action</label><input type="text" class="why-in" id="' + id + '_w" placeholder="Why is this KPI Red and what will be done?"></div>';
       wrap.appendChild(row);
@@ -640,22 +816,47 @@ function buildKpis(dept){
     const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm');
     act.addEventListener('input', () => updateRow(row));
     act.addEventListener('change', () => updateRow(row));
-    na.addEventListener('change', () => { act.disabled = na.checked; if (na.checked) act.value = ''; updateRow(row); });
+    na.addEventListener('change', () => { syncNA(row); updateRow(row); });
+    row.querySelectorAll('.part').forEach(p => p.addEventListener('input', () => { calcParts(row); updateRow(row); }));
     cm.addEventListener('change', () => { row.classList.toggle('show-cmt', cm.checked); if (cm.checked) setTimeout(() => row.querySelector('.cm-in').focus(), 30); });
   });
   restoreDraft();
-  document.querySelectorAll('.kpi').forEach(row => { row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
+  document.querySelectorAll('.kpi').forEach(row => { syncNA(row); calcParts(row); row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
   refreshHistoryHints();
 }
 function kpiOf(row){ return LIB[deptSel.value].kras[row.dataset.ki].kpis[row.dataset.kj]; }
+/* ---------- KPIs entered in several boxes (MIT / Non-MIT / WP, merged complaint KPI) ---------- */
+function partDefs(k){
+  const m = k.multi;
+  return m.parts.map(p => m.mode === 'sum' ? { label:p.label, target: Math.round(k.target / m.parts.length * 100) / 100, better:k.better } : p);
+}
+function syncNA(row){
+  const on = row.querySelector('.na').checked, act = row.querySelector('.act');
+  act.disabled = on || LOCKED; if (on) act.value = '';
+  row.querySelectorAll('.part').forEach(p => { p.disabled = on || LOCKED; if (on) p.value = ''; });
+}
+function calcParts(row){
+  const k = kpiOf(row); if (!k.multi) return;
+  const act = row.querySelector('.act'), ins = [...row.querySelectorAll('.part')], defs = partDefs(k);
+  if (row.querySelector('.na').checked || ins.some(i => i.value === '' || isNaN(parseFloat(i.value)))){ act.value = ''; return; }
+  const v = ins.map(i => parseFloat(i.value));
+  if (k.multi.mode === 'sum') act.value = Math.round(v.reduce((a, b) => a + b, 0) * 100) / 100;
+  else act.value = (v.reduce((a, x, i) => a + achievement({ target:defs[i].target, better:defs[i].better, type:'n' }, x), 0) / v.length).toFixed(1);
+}
+function partBreakdown(row){
+  const k = kpiOf(row); if (!k.multi) return '';
+  const ins = [...row.querySelectorAll('.part')];
+  if (ins.some(i => i.value === '')) return '';
+  return partDefs(k).map((p, i) => p.label + ' ' + ins[i].value).join(' · ');
+}
 function rowResult(row){
   const k = kpiOf(row);
   const na = row.querySelector('.na').checked;
   const val = row.querySelector('.act').value;
   const comment = row.querySelector('.cm').checked ? row.querySelector('.cm-in').value.trim() : '';
-  if (na) return { k, na:true, val:'NA', ach:null, rag:'NA', comment };
+  if (na) return { k, na:true, val:'NA', ach:null, rag:'NA', comment, breakdown:'' };
   const ach = val === '' ? null : achievement(k, val);
-  return { k, na:false, val, ach, rag: ach === null ? '' : ragOf(ach), comment };
+  return { k, na:false, val, ach, rag: ach === null ? '' : ragOf(ach), comment, breakdown: partBreakdown(row) };
 }
 function updateRow(row){
   const r = rowResult(row);
@@ -711,7 +912,7 @@ deptSel.addEventListener('change', () => {
   $('sect3').style.display = on ? 'block' : 'none';
   $('actionOwner').value = '';
   setOwner(deptSel.value);
-  if (on){ buildKpis(deptSel.value); loadHistory(deptSel.value); } else { $('dupNotice').classList.remove('show'); refreshDue(); }
+  if (on){ buildKpis(deptSel.value); loadHistory(deptSel.value); } else { $('dupNotice').classList.remove('show', 'locked', 'editing'); refreshDue(); }
 });
 weekSel.addEventListener('change', () => { showPeriod(); if (deptSel.value) buildKpis(deptSel.value); });
 document.querySelectorAll('input[name="criticalIssue"]').forEach(r => r.addEventListener('change', () => {
@@ -720,8 +921,9 @@ document.querySelectorAll('input[name="criticalIssue"]').forEach(r => r.addEvent
 
 /* ---------------- draft auto-save (per department + week, this device only) ---------------- */
 const TEXT_IDS = ['keyAchievements','nextWeekPriorities','keyChallenges','correctiveAction','actionOwner','actionDue','supportRequired','criticalIssueDetails'];
-function draftKey(){ const w = selectedWeek(); return deptSel.value && w ? 'aaalay_draft_v4_' + deptSel.value + '|' + w.to : null; }
+function draftKey(){ const w = selectedWeek(); return deptSel.value && w ? 'aaalay_draft_v5_' + deptSel.value + '|' + ownerSel.value + '|' + w.to : null; }
 function saveDraft(){
+  if (LOCKED || REBUILDING) return;                              /* a locked week is read-only: never keep it as a draft */
   const key = draftKey(); if (!key) return;
   const data = { owner: ownerSel.value, crit: document.querySelector('input[name="criticalIssue"]:checked').value, f:{}, k:{} };
   TEXT_IDS.forEach(id => data.f[id] = $(id).value);
@@ -734,15 +936,13 @@ function restoreDraft(){
   TEXT_IDS.forEach(id => { if (id !== 'actionOwner') $(id).value = ''; });
   if (!data) return;
   TEXT_IDS.forEach(id => { if (data.f[id] !== undefined && data.f[id] !== '') $(id).value = data.f[id]; });
-  if (data.owner && [...ownerSel.options].some(o => o.value === data.owner)) ownerSel.value = data.owner;
   const cr = document.querySelector('input[name="criticalIssue"][value="' + (data.crit || 'No') + '"]'); if (cr){ cr.checked = true; cr.dispatchEvent(new Event('change')); }
   Object.keys(data.k).forEach(id => { const el = $(id); if (!el) return; if (el.type === 'checkbox'){ el.checked = data.k[id]; } else el.value = data.k[id]; });
-  document.querySelectorAll('.kpi').forEach(row => { row.querySelector('.act').disabled = row.querySelector('.na').checked; });
   $('draftNote').textContent = 'Restored your saved entries for this week.';
 }
 function clearDraft(){ const key = draftKey(); if (key) try { localStorage.removeItem(key); } catch(e){} }
-document.addEventListener('input', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel) saveDraft(); });
-document.addEventListener('change', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel) saveDraft(); });
+document.addEventListener('input', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel && e.target !== ownerSel) saveDraft(); });
+document.addEventListener('change', e => { if (e.target.closest('#formWrap') && e.target !== deptSel && e.target !== weekSel && e.target !== ownerSel) saveDraft(); });
 
 /* ---------------- validation & payload ---------------- */
 function validate(){
@@ -776,7 +976,7 @@ function validate(){
     if (!$('actionOwner').value.trim()){ errs.push('Add the action owner.'); mark($('actionOwner')); }
     if (!$('actionDue').value){ errs.push('Add the action due date.'); mark($('actionDue')); }
   }
-  if ($('actionDue').value && $('actionDue').value < todayISO()) errs.push('Action due date cannot be in the past.');
+  if ($('actionDue').value && $('actionDue').value < todayISO() && $('actionDue').value !== ORIG_DUE) errs.push('Action due date cannot be in the past.');
   if (document.querySelector('input[name="criticalIssue"]:checked').value === 'Yes' && !$('criticalIssueDetails').value.trim()){ errs.push('Describe the critical issue.'); mark($('criticalIssueDetails')); }
   $('errBox').textContent = errs.join('\n');
   if (firstBad){ firstBad.scrollIntoView({behavior:'smooth', block:'center'}); if (firstBad.focus) setTimeout(() => firstBad.focus({preventScroll:true}), 300); }
@@ -818,7 +1018,7 @@ function collectPayload(){
       actual: r.val, achievementPct: r.ach === null ? '' : r.ach.toFixed(1),
       status: r.na ? 'Not Applicable' : RAG_LABEL[r.rag],
       remarks: rows[i].querySelector('.why-in').value.trim(),
-      kpiComment: r.comment
+      kpiComment: [r.breakdown ? '[' + r.breakdown + ']' : '', r.comment].filter(Boolean).join(' ')   /* box-wise figures are kept in front of the comment */
     });
   });
 }
@@ -849,14 +1049,14 @@ async function postRows(rows){
   }
 }
 function rowSid(r){ return String(r.submissionId || r.submissionid || r['Submission ID'] || ''); }
-async function verifySaved(sid, dept, toDate, beforeCount){
+async function verifySaved(sid, dept, toDate, beforeCount, owner){
   const waits = [1500, 2500, 4000, 6000, 8000, 10000];
   for (let i = 0; i < waits.length; i++){
     await new Promise(r => setTimeout(r, waits[i]));
     const j = await getJSON('action=data&fresh=1&department=' + encodeURIComponent(dept));
     const rows = j && (Array.isArray(j) ? j : j.rows) || [];
     if (rows.some(r => rowSid(r) === sid)) return true;                                   // exact match on the reference
-    const now = rows.filter(r => r.department === dept && toISODate(r.toDate) === toDate).length;
+    const now = rowsFor(rows, dept, toDate, owner).length;
     if (beforeCount !== null && now > beforeCount) return true;                            // fallback: new rows for this week
     $('submitStatus').textContent = 'Confirming with the Google Sheet… (' + (i + 1) + '/' + waits.length + ')';
   }
@@ -896,11 +1096,12 @@ async function sendSubmission(rows){
   $('errBox').innerHTML = ''; $('submitStatus').textContent = 'Sending to Google Sheet…';
   const dept = rows[0].department, to = rows[0].toDate, sid = rows[0].submissionId;
   savePending({ rows, at: new Date().toISOString() });                      // keep a copy until the sheet confirms
-  const before = HISTORY ? historyFor(dept, to).length : null;
+  const owner = rows[0].submissionOwner;
+  const before = HISTORY ? historyFor(dept, to, owner).length : null;
   const res = await postRows(rows);
   if (res.state === 'error'){ savePending({ rows, at: new Date().toISOString() }); showUnconfirmed(rows, 'The Google Sheet replied: ' + res.msg + '.'); return; }
   $('submitStatus').textContent = 'Confirming with the Google Sheet…';
-  const ok = await verifySaved(sid, dept, to, before);
+  const ok = await verifySaved(sid, dept, to, before, owner);
   if (ok || res.state === 'ok'){
     clearDraft(); savePending(null); HISTORY = null; loadHistory(dept);
     showSuccess(rows, true);
@@ -915,9 +1116,17 @@ $('submitBtn').addEventListener('click', async () => {
     await sendSubmission(pend.rows);                                        // re-send the same reference, never a duplicate
     return;
   }
-  if (!validate()) return;
   const w = selectedWeek();
-  if (HISTORY && historyFor(deptSel.value, w.to).length && !confirm(deptSel.value + ' has already submitted for ' + fmtDate(w.from) + ' – ' + fmtDate(w.to) + '. Your new entry will replace it on the dashboard. Submit again?')) return;
+  if (deptSel.value && w && !HISTORY){                                      // the lock needs the sheet: check before accepting anything
+    $('submitStatus').textContent = 'Checking earlier submissions…';
+    await loadHistory(deptSel.value); $('submitStatus').textContent = '';
+  }
+  if (LOCKED || (deptSel.value && w && historyFor(deptSel.value, w.to).length && !weekOpen(w))){
+    $('errBox').textContent = 'This week is locked — it was already submitted and its edit window closed on ' + fmtDate(editDeadline(w)) + '. Ask management to correct it from the dashboard.';
+    return;
+  }
+  if (!validate()) return;
+  if (historyFor(deptSel.value, w.to).length && !confirm('Update the ' + deptSel.value + ' review for ' + fmtDate(w.from) + ' – ' + fmtDate(w.to) + '? Your new entry replaces the earlier one on the dashboard.')) return;
   await sendSubmission(collectPayload());
 });
 
