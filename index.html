@@ -83,6 +83,12 @@
   .kpi .parts label{display:flex;flex-direction:column;gap:3px;width:150px;font-size:.76rem;font-weight:600;color:var(--slate);}
   .kpi .parts label small{font-weight:500;}
   .kpi .parts-note{font-size:.74rem;color:var(--slate);padding-bottom:11px;}
+  .kpi .parts label.xl{border-left:2px solid var(--border);padding-left:10px;}
+  .kpi .xtra-note{font-size:.78rem;font-weight:700;color:var(--blue-dark);padding-bottom:11px;min-width:150px;}
+  .tracker-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;}
+  .btn.sheet{background:linear-gradient(135deg,#1e8e3e,#0f6b2f);text-decoration:none;}
+  .btn.sheet svg{width:18px;height:18px;}
+  .tracker-note{color:var(--muted);font-size:.8rem;margin:0;}
   .kpi .act.calc{font-weight:700;cursor:default;background:transparent;}
   .notice.locked{background:var(--r-bg,#FBEAE9);color:var(--r);border-color:var(--r);}
   .notice.editing{background:var(--g-bg,#E7F6EF);color:var(--g);border-color:var(--g);}
@@ -178,6 +184,15 @@
       </div>
     </div>
     <div class="notice" id="dupNotice"></div>
+  </section>
+
+  <section class="card" id="sectTracker" style="display:none;">
+    <h2><span class="num">&#9776;</span> Activity Tracker</h2>
+    <p class="hint">Log the week's activities in your department's Activity Tracker (Google Sheet). Its Weekly Scorecard gives the green ACTUAL figures to type below.</p>
+    <div class="tracker-row">
+      <a class="btn sheet" id="trackerLink" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span id="trackerLabel">Open Activity Tracker</span></a>
+      <p class="tracker-note">Opens in a new tab. The sheet is shared only with this department's head — a Google account without access will see Google's "You need access" page.</p>
+    </div>
   </section>
 
   <section class="card" id="sect2">
@@ -375,6 +390,21 @@ function validConfig(c){
    after KPI_REVISION is used exactly as saved.
 ===================================================================== */
 const KPI_REVISION = '2026-10-10';
+/* Department activity-tracker Google Sheets (each sheet is shared only with its own department) */
+const TRACKER_SHEETS = {
+  'Marketing': 'https://docs.google.com/spreadsheets/d/1dcBqDxAyXZMNTuOFs3D1ZNimqoqPqNbNShTxvXWKq24/edit?gid=895852307#gid=895852307',
+  'Sales': 'https://docs.google.com/spreadsheets/d/1geZ5Q_O6hELt0lINeixVEAfu7rzz44_LyLDmruvJUoQ/edit?gid=491430187#gid=491430187',
+  'Operations': 'https://docs.google.com/spreadsheets/d/1XeKWDey9mj7oACU-r7ehQv7cZkJGE6x3iA2s8EClq7M/edit?gid=527518334#gid=527518334',
+  'Customer Experience': 'https://docs.google.com/spreadsheets/d/1_1bC5zxe_1Ee_0scClKW8rR33ulVN6VklouTKnPdV5k/edit?gid=778668545#gid=778668545',
+  'Business Development': 'https://docs.google.com/spreadsheets/d/1XG2yildlnl1rMZNs6Mfq5BmMlgmzsdctx14GEUfgMY0/edit?gid=177383776#gid=177383776',
+  'HR': 'https://docs.google.com/spreadsheets/d/19QFxZMBDD66FT64KBu65NjXqk-TRwzT28QX_nR0_uAs/edit',
+  'Finance': 'https://docs.google.com/spreadsheets/d/1qYvGHzTExpqyPtG-CR-7BLLZkmJzEvLcFey9P4lHrJE/edit?gid=665047281#gid=665047281',
+  'Nodal & Security': 'https://docs.google.com/spreadsheets/d/1ivs_lUrVYVzu7hhE-ZvMJyVbJiNO0qNiMJsXPWIU7fk/edit',
+  'Purchase': 'https://docs.google.com/spreadsheets/d/1jMpyAhIikuLA0PO9zTJ7HkzdpOFETHlOAiWm-YcaKqc/edit?gid=2119722747#gid=2119722747',
+  'Data Analytics': 'https://docs.google.com/spreadsheets/d/1JX5YrE6HZWtDg15cUUY6lOdB2YrvxACquKRveTZHeao/edit',
+  'Management': 'https://docs.google.com/spreadsheets/d/1dVD_oRyGvWo4Brr21UrsIOUPpnGf9YZhrXB69s3zJj0/edit'
+};
+
 const MERGED_COMPLAINT_KPI = 'Complaint Resolution Time (≤ 24 hrs) & Repeat Complaint Rate';
 /* old KPI name -> new KPI name (history of the old name continues under the new one) */
 const KPI_RENAMES = {
@@ -389,7 +419,9 @@ const MULTI_KPI = {
   'Business Development|New Property in Pipeline': { mode:'sum', parts:[{label:'MIT'},{label:'Non-MIT'},{label:'WP'}] },
   ['Operations|' + MERGED_COMPLAINT_KPI]: { mode:'avg', parts:[
     { label:'Resolution time (hrs)', target:24, better:'lower', was:'Complaint Resolution Time (≤ 24 hrs)' },
-    { label:'Repeat complaints', target:2, better:'lower', was:'Repeat Complaint Rate' }] }
+    { label:'Repeat complaints', target:2, better:'lower', was:'Repeat Complaint Rate' }],
+    /* recorded with the figures but not scored: the form shows Resolved ÷ Total as a % */
+    extra:[{ label:'Total complaints' }, { label:'Resolved complaints' }] }
 };
 /* Finance and HR KRA/KPI sets of 15 Oct 2026. A KPI setup saved in the Google Sheet before this
    change still has the old Finance / HR KPIs — those two departments are replaced here so the form
@@ -703,7 +735,7 @@ function setLocked(on){
   $('submitBtn').style.display = on ? 'none' : '';
 }
 function formIsEmpty(){
-  return ![...document.querySelectorAll('#kraContainer .act, #kraContainer .part')].some(el => el.value) &&
+  return ![...document.querySelectorAll('#kraContainer .act, #kraContainer .part, #kraContainer .xtra')].some(el => el.value) &&
          ![...document.querySelectorAll('#kraContainer .na')].some(el => el.checked) &&
          !$('keyAchievements').value.trim() && !$('nextWeekPriorities').value.trim();
 }
@@ -711,7 +743,7 @@ function prefillFrom(rows){
   const dept = deptSel.value, first = rows[rows.length - 1];
   document.querySelectorAll('.kpi').forEach(row => {
     const k = kpiOf(row), r = rows.filter(x => kpiMatches(fv(x, 'kpi'), k)).pop();
-    const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm'), ins = [...row.querySelectorAll('.part')];
+    const act = row.querySelector('.act'), na = row.querySelector('.na'), cm = row.querySelector('.cm'), ins = [...row.querySelectorAll('.part, .xtra')];
     let comment = '';
     act.value = ''; na.checked = false; ins.forEach(i => i.value = ''); row.querySelector('.why-in').value = '';
     if (r){
@@ -728,7 +760,7 @@ function prefillFrom(rows){
       k.multi.parts.forEach((p, i) => { const o = rows.filter(x => String(fv(x, 'kpi')).trim() === p.was).pop(); if (o && ins[i] && !isNaN(parseFloat(fv(o, 'actual')))) ins[i].value = parseFloat(fv(o, 'actual')); });
     }
     cm.checked = !!comment; row.querySelector('.cm-in').value = comment;
-    syncNA(row); calcParts(row); row.classList.toggle('show-cmt', cm.checked);
+    syncNA(row); calcParts(row); calcXtra(row); row.classList.toggle('show-cmt', cm.checked);
   });
   LIB[dept].kras.forEach((kra, ki) => { const r = rows.filter(x => fv(x, 'kra') === kra.name && String(fv(x, 'kraRemark')).trim()).pop(); $('kra_r_' + ki).value = r ? fv(r, 'kraRemark') : ''; });
   $('keyAchievements').value = fv(first, 'keyAchievements'); $('nextWeekPriorities').value = fv(first, 'nextWeekPriorities');
@@ -810,7 +842,11 @@ function buildKpis(dept){
       const partsHtml = !parts ? '' : '<div class="parts">' + parts.map((p, pi) =>
           '<label>' + esc(p.label) + ' <small>target ' + (p.better === 'lower' ? '≤ ' : '') + fmtNum(p.target) + '</small>' +
           '<input type="number" class="part" id="' + id + '_p' + pi + '" step="any" min="0" inputmode="decimal" placeholder="' + esc(p.label) + '"></label>').join('') +
-        '<span class="parts-note">' + (isSum ? 'Fill all ' + parts.length + ' boxes — the total is added up automatically.' : 'Fill both boxes — the score is the average of the two achievements.') + '</span></div>';
+        (k.multi.extra || []).map((p, pi) =>
+          '<label class="xl">' + esc(p.label) + ' <small>for information</small>' +
+          '<input type="number" class="xtra" id="' + id + '_x' + pi + '" step="any" min="0" inputmode="decimal" placeholder="' + esc(p.label) + '"></label>').join('') +
+        (k.multi.extra ? '<span class="xtra-note" id="' + id + '_xn"></span>' : '') +
+        '<span class="parts-note">' + (isSum ? 'Fill all ' + parts.length + ' boxes — the total is added up automatically.' : 'Fill both scored boxes — the score is the average of the two achievements.' + (k.multi.extra ? ' Total / resolved complaints are recorded with the figures (not scored).' : '')) + '</span></div>';
       const tgHtml = !parts ? 'Target <b>' + esc(fmtTarget(k)) + '</b> · ' + dirText(k)
         : isSum ? 'Target <b>' + esc(fmtTarget(k)) + '</b> · ' + fmtNum(parts[0].target) + ' each for ' + esc(parts.map(p => p.label).join(', ')) + ' · ' + dirText(k)
         : 'Target ' + parts.map(p => '<b>' + (p.better === 'lower' ? '≤ ' : '') + fmtNum(p.target) + '</b> ' + esc(p.label.toLowerCase())).join(' and ') + ' · lower is better';
@@ -834,10 +870,11 @@ function buildKpis(dept){
     act.addEventListener('change', () => updateRow(row));
     na.addEventListener('change', () => { syncNA(row); updateRow(row); });
     row.querySelectorAll('.part').forEach(p => p.addEventListener('input', () => { calcParts(row); updateRow(row); }));
+    row.querySelectorAll('.xtra').forEach(p => p.addEventListener('input', () => { calcXtra(row); updateRow(row); }));
     cm.addEventListener('change', () => { row.classList.toggle('show-cmt', cm.checked); if (cm.checked) setTimeout(() => row.querySelector('.cm-in').focus(), 30); });
   });
   restoreDraft();
-  document.querySelectorAll('.kpi').forEach(row => { syncNA(row); calcParts(row); row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
+  document.querySelectorAll('.kpi').forEach(row => { syncNA(row); calcParts(row); calcXtra(row); row.classList.toggle('show-cmt', row.querySelector('.cm').checked); updateRow(row); });
   refreshHistoryHints();
 }
 function kpiOf(row){ return LIB[deptSel.value].kras[row.dataset.ki].kpis[row.dataset.kj]; }
@@ -849,7 +886,7 @@ function partDefs(k){
 function syncNA(row){
   const on = row.querySelector('.na').checked, act = row.querySelector('.act');
   act.disabled = on || LOCKED; if (on) act.value = '';
-  row.querySelectorAll('.part').forEach(p => { p.disabled = on || LOCKED; if (on) p.value = ''; });
+  row.querySelectorAll('.part, .xtra').forEach(p => { p.disabled = on || LOCKED; if (on) p.value = ''; });
 }
 function calcParts(row){
   const k = kpiOf(row); if (!k.multi) return;
@@ -859,11 +896,21 @@ function calcParts(row){
   if (k.multi.mode === 'sum') act.value = Math.round(v.reduce((a, b) => a + b, 0) * 100) / 100;
   else act.value = (v.reduce((a, x, i) => a + achievement({ target:defs[i].target, better:defs[i].better, type:'n' }, x), 0) / v.length).toFixed(1);
 }
+/* information-only boxes of the merged complaint KPI: Total complaints / Resolved complaints = resolved % */
+function calcXtra(row){
+  const k = kpiOf(row), note = row.querySelector('.xtra-note'); if (!k.multi || !k.multi.extra || !note) return;
+  const v = [...row.querySelectorAll('.xtra')].map(i => parseFloat(i.value));
+  if (v.length < 2 || v.some(isNaN)){ note.textContent = ''; return; }
+  note.textContent = v[0] > 0 ? 'Resolved ' + fmtNum(v[1]) + ' / ' + fmtNum(v[0]) + ' = ' + (Math.round(v[1] / v[0] * 1000) / 10) + '%' : 'Total complaints must be more than 0';
+}
 function partBreakdown(row){
   const k = kpiOf(row); if (!k.multi) return '';
   const ins = [...row.querySelectorAll('.part')];
   if (ins.some(i => i.value === '')) return '';
-  return partDefs(k).map((p, i) => p.label + ' ' + ins[i].value).join(' · ');
+  const main = partDefs(k).map((p, i) => p.label + ' ' + ins[i].value).join(' · ');
+  const xs = [...row.querySelectorAll('.xtra')];
+  if (!xs.length || xs.some(i => i.value === '')) return main;
+  return main + ' · ' + (k.multi.extra || []).map((p, i) => p.label + ' ' + xs[i].value).join(' · ');
 }
 function rowResult(row){
   const k = kpiOf(row);
@@ -922,10 +969,16 @@ function refreshTotals(){
   ['lblAction','lblActOwner','lblActDue'].forEach(id => $(id).classList.toggle('req', counts.R > 0));
 }
 
+function showTracker(dept){
+  const url = TRACKER_SHEETS[dept], card = $('sectTracker');
+  card.style.display = url ? 'block' : 'none';
+  if (url){ $('trackerLink').href = url; $('trackerLabel').textContent = 'Open ' + dept + ' Activity Tracker'; }
+}
 deptSel.addEventListener('change', () => {
   const on = !!deptSel.value;
   $('sect2').style.display = on ? 'block' : 'none';
   $('sect3').style.display = on ? 'block' : 'none';
+  showTracker(deptSel.value);
   $('actionOwner').value = '';
   setOwner(deptSel.value);
   if (on){ buildKpis(deptSel.value); loadHistory(deptSel.value); } else { $('dupNotice').classList.remove('show', 'locked', 'editing'); refreshDue(); }
