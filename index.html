@@ -165,7 +165,7 @@
 
   <section class="card" id="sect1">
     <h2><span class="num">1</span> Report details</h2>
-    <p class="hint">Only completed weeks of <span id="fyText"></span> can be selected. The latest option is last week. A submitted week can be corrected until the end of the following week (Sunday); after that it is locked.</p>
+    <p class="hint">Only completed weeks of <span id="fyText"></span> can be selected. The latest option is last week. A submitted week can be corrected until the end of the following week (Sunday); after that it is locked. <b>Because the KRA / KPI sets changed, Wk 27, 28 and 29 (28 Sep – 18 Oct 2026) must be filled in again by every department — they stay open until Saturday 24 Oct 2026.</b></p>
     <div class="grid3">
       <div class="field">
         <label class="req" for="department">Department</label>
@@ -727,7 +727,16 @@ function latestSubmission(rows){
    A week can be submitted / corrected until the Sunday of the FOLLOWING week.
    From the next Monday a submitted week is locked (read-only). */
 let STATE = 'new', LOCKED = false, REBUILDING = false, PREFILLED = '', ORIG_DUE = '';
-function editDeadline(w){ return fromDayNum(dayNum(w.to) + 7); }
+/* ---- re-opened weeks ----
+   The KRA / KPI sets changed in Oct 2026, so Wk 27, 28 and 29 (weeks ending 4, 11 and 18 Oct 2026)
+   must be filled in again by every department. They stay open until REOPEN_UNTIL (Saturday 24 Oct 2026)
+   even if their normal edit window has closed. Remove the week-end dates (or empty the list) after that. */
+const REOPEN_WEEKS = ['2026-10-04', '2026-10-11', '2026-10-18'];
+const REOPEN_UNTIL = '2026-10-24';
+function editDeadline(w){
+  const normal = fromDayNum(dayNum(w.to) + 7);
+  return REOPEN_WEEKS.includes(w.to) && REOPEN_UNTIL > normal ? REOPEN_UNTIL : normal;
+}
 function weekOpen(w){ return todayISO() <= editDeadline(w); }
 function setLocked(on){
   LOCKED = on;
