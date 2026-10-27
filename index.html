@@ -113,6 +113,7 @@
   .conf-box .icon{width:68px;height:68px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 18px;}
   .conf-box p{color:var(--slate);}
   .footer-note{max-width:920px;margin:0 auto 50px;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center;}
+  .app-version{display:block;margin-top:6px;font-size:.72rem;color:var(--muted);letter-spacing:.02em;}
   .legend{font-size:.78rem;color:var(--muted);margin:4px 0 0;}
   .owner-box{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--accent-tint);min-height:44px;}
   .owner-box .av{width:28px;height:28px;border-radius:50%;background:var(--blue-dark);color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
@@ -270,12 +271,23 @@
 </div>
 </main>
 
-<p class="footer-note">AAALAY Weekly KRA &amp; KPI Review · Submit every Monday for the previous week · KRAs, KPIs and targets are managed by management from the dashboard.</p>
+<p class="footer-note">AAALAY Weekly KRA &amp; KPI Review · Submit every Monday for the previous week · KRAs, KPIs and targets are managed by management from the dashboard.<span class="app-version"></span></p>
 
 <script>
 /* Google Apps Script Web App URL */
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VFDtukwbl5MfkfzCkWhnotK77DlCS7yYQE8SbM0_qnzolrwKzkK99GjQ/exec";
-const FORM_VERSION = '5.0';
+/* ---- VERSION ----
+   Shown in the footer of the page. Raise the number and the date with EVERY change to this file
+   (also update the same lines in the dashboard, so both always show the same version).
+   The form also saves its version with each submission (column "formVersion").
+   Change log
+     5.1  21 Oct 2026  Operations complaint KPI: Total / Resolved complaints boxes · Activity Tracker buttons
+                       for every department · Wk 27–29 re-opened until Sat 24 Oct 2026 · Sales head Pravin Shinde,
+                       Customer Experience head Akash Swami · version shown in the footer
+     5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
+const APP_VERSION = '5.1';
+const APP_UPDATED = '21 Oct 2026';
+const FORM_VERSION = APP_VERSION;
 
 /* =====================================================================
    SHARED CONFIGURATION — identical block in the Form and the Dashboard.
@@ -1252,6 +1264,7 @@ $('submitBtn').addEventListener('click', async () => {
 
 
 loadConfig();
+document.querySelectorAll('.app-version').forEach(el => { el.textContent = 'AAALAY KRA & KPI Form · Version ' + APP_VERSION + ' · Updated ' + APP_UPDATED; });
 </script>
 </body>
 </html>
