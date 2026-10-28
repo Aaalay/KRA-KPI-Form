@@ -86,6 +86,9 @@
   .kpi .parts label.xl{border-left:2px solid var(--border);padding-left:10px;}
   .kpi .xtra-note{font-size:.78rem;font-weight:700;color:var(--blue-dark);padding-bottom:11px;min-width:150px;}
   .tracker-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;}
+  .me-strip{justify-content:space-between;background:#fff;border:1px solid var(--border);border-radius:12px;padding:9px 14px;margin:0 0 14px;color:var(--slate);box-shadow:var(--shadow);}
+  .me-strip a{color:var(--blue-dark);font-weight:600;text-decoration:none;margin-left:auto;}
+  .me-strip button{color:var(--blue-dark);border-color:var(--border);}
   .userbar{color:#DCE5FB;margin:10px auto 0;max-width:var(--maxw,980px);padding:0 20px;}
   .userbar a{color:#fff;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:3px 10px;}
   #tactical{margin-top:26px;border:1.5px solid #C9D6F5;border-radius:12px;overflow:hidden;background:#fff;}
@@ -203,7 +206,7 @@
       <button type="button" class="ag-other" id="agOther">Use a different Google account</button>
       <ul><li>Department heads: the form opens with your department and your name.</li><li>Use your company account (name@aaalay.com), not a personal Gmail.</li><li>Problem signing in? Contact Nikhil Patil.</li></ul>
     </div>
-    <div class="ag-foot" id="agFoot">AAALAY Performance Management · Version 5.5 · Updated 24 Oct 2026</div>
+    <div class="ag-foot" id="agFoot">AAALAY Performance Management · Version 5.5.1 · Updated 28 Oct 2026</div>
   </div>
 </div>
 
@@ -236,7 +239,7 @@
     <div class="grid3">
       <div class="field">
         <label class="req" for="department">Department</label>
-        <select id="department" disabled><option value="">Loading KPI list…</option></select>
+        <select id="department" disabled><option value="">Signing in…</option></select>
         <div class="cfg-note" id="cfgNote"></div>
       </div>
       <div class="field">
@@ -359,6 +362,8 @@ const GOOGLE_CLIENT_ID = '1008840573906-bkrhfh2kam65t8aua6f4f53sqm8bvjqi.apps.go
 const ALLOWED_DOMAIN = 'aaalay.com';
 const PAGE = 'form';
 const TOKEN_KEY = 'aaalay_idt_v1';
+const BOOT_KEY = 'aaalay_boot_v1_';          /* + email: last access + KPI setup, so the form opens at once next time */
+let BOOT = null, PRELOAD = null;
 let ID_TOKEN = '', ME = null, AUTH_WAITERS = [], STARTED = false, START_FNS = [], REAUTH_TIMER = null;
 const meKey = s => String(s === undefined || s === null ? '' : s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
 function meSeesDept(name){ return !!ME && (ME.all || (ME.depts || []).some(d => meKey(d) === meKey(name))); }
@@ -397,30 +402,46 @@ function authParams(){ return 'page=' + PAGE + '&id_token=' + encodeURIComponent
 async function getJSON(params, retried){
   await authReady();
   const j = await rawGet(params + '&' + authParams());
-  if (j && j.auth && !retried){ ME = ME && null; ID_TOKEN = ''; sessionStorage.removeItem(TOKEN_KEY); return getJSON(params, true); }
+  if (j && j.auth && !retried){ ME = ME && null; ID_TOKEN = ''; localStorage.removeItem(TOKEN_KEY); return getJSON(params, true); }
   return j;
 }
-async function useToken(token, silent){
-  const p = jwtPayload(token);
-  if (!p){ showGate('Sign-in failed. Please try again.', true); return; }
-  const email = String(p.email || '').toLowerCase();
-  if (email.split('@')[1] !== ALLOWED_DOMAIN || (p.hd && p.hd !== ALLOWED_DOMAIN)){
-    sessionStorage.removeItem(TOKEN_KEY);
-    showGate(email + ' is not an AAALAY company account. Click "Use a different Google account" and choose your @' + ALLOWED_DOMAIN + ' account.', true); return;
-  }
-  if (!silent) agStatus('Checking access for ' + email + '…');
-  const j = await rawGet('action=me&page=' + PAGE + '&id_token=' + encodeURIComponent(token));
-  if (!j){ showGate('The Google Sheet is not answering. Check your internet and try again.', true); return; }
-  if (!j.ok){ sessionStorage.removeItem(TOKEN_KEY); ID_TOKEN = ''; showGate(j.error || 'Access not allowed', true); return; }
-  ID_TOKEN = token; ME = j.me; sessionStorage.setItem(TOKEN_KEY, token);
+function startApp(token, boot){
+  ID_TOKEN = token; ME = boot.me; BOOT = boot;
+  if (boot.dept && Array.isArray(boot.rows)) PRELOAD = { dept: boot.dept, rows: boot.rows };
   clearTimeout(REAUTH_TIMER); REAUTH_TIMER = null;
   document.body.classList.add('signed-in');
   paintUser();
   const w = AUTH_WAITERS; AUTH_WAITERS = []; w.forEach(f => f());
   if (!STARTED){ STARTED = true; const fns = START_FNS; START_FNS = []; fns.forEach(f => { try { f(); } catch(e){ console.error(e); } }); }
 }
+async function useToken(token, silent){
+  await 0;                                          /* let the page finish loading first */
+  const p = jwtPayload(token);
+  if (!p){ showGate('Sign-in failed. Please try again.', true); return; }
+  const email = String(p.email || '').toLowerCase();
+  if (email.split('@')[1] !== ALLOWED_DOMAIN || (p.hd && p.hd !== ALLOWED_DOMAIN)){
+    localStorage.removeItem(TOKEN_KEY);
+    showGate(email + ' is not an AAALAY company account. Click "Use a different Google account" and choose your @' + ALLOWED_DOMAIN + ' account.', true); return;
+  }
+  localStorage.setItem(TOKEN_KEY, token);
+  /* 1. open at once from what this person saw last time (the sheet still checks every request) */
+  let saved = null; try { saved = JSON.parse(localStorage.getItem(BOOT_KEY + email) || 'null'); } catch(e){}
+  const fast = !STARTED && saved && saved.me;
+  if (fast) startApp(token, { me: saved.me, config: saved.config });
+  else if (!silent) agStatus('Opening the form for ' + email + '…');
+  /* 2. one call: access + KPI setup (+ this department's history) */
+  const j = await rawGet('action=boot&page=' + PAGE + '&id_token=' + encodeURIComponent(token));
+  if (!j){ if (!fast) showGate('The Google Sheet is not answering. Check your internet and try again.', true); return; }
+  if (!j.ok){ localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(BOOT_KEY + email); ID_TOKEN = ''; ME = null; showGate(j.error || 'Access not allowed', true); return; }
+  try { localStorage.setItem(BOOT_KEY + email, JSON.stringify({ me: j.me, config: j.config, at: Date.now() })); } catch(e){}
+  if (!STARTED){ startApp(token, j); return; }
+  /* already open (fast start or renewed sign-in): just refresh what changed */
+  ID_TOKEN = token; ME = j.me; paintUser();
+  const w = AUTH_WAITERS; AUTH_WAITERS = []; w.forEach(f => f());
+  if (fast) applyBoot(j, true);
+}
 function signOut(){
-  sessionStorage.removeItem(TOKEN_KEY); ID_TOKEN = ''; ME = null;
+  localStorage.removeItem(TOKEN_KEY); ID_TOKEN = ''; ME = null;
   try { google.accounts.id.disableAutoSelect(); } catch(e){}
   location.reload();
 }
@@ -429,15 +450,15 @@ function initGoogle(){
   google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID.trim(), callback: r => useToken(r.credential), auto_select: true, hd: ALLOWED_DOMAIN,
     cancel_on_tap_outside: false, use_fedcm_for_prompt: true, context: 'signin', itp_support: true });
   google.accounts.id.renderButton(document.getElementById('gsiBtn'), { theme:'filled_blue', size:'large', shape:'pill', text:'signin_with', width: 300, logo_alignment:'left' });
-  if (!ME){ agStatus(''); if (!tokenLeft(sessionStorage.getItem(TOKEN_KEY))) google.accounts.id.prompt(); }
+  if (!ME){ agStatus(''); if (!tokenLeft(localStorage.getItem(TOKEN_KEY))) google.accounts.id.prompt(); }
 }
 (function bootAuth(){
   document.getElementById('agOther').addEventListener('click', () => {
-    sessionStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_KEY);
     try { google.accounts.id.disableAutoSelect(); } catch(e){}
     agStatus('Click "Sign in with Google" above and pick your @' + ALLOWED_DOMAIN + ' account.');
   });
-  const saved = sessionStorage.getItem(TOKEN_KEY);
+  const saved = localStorage.getItem(TOKEN_KEY);
   if (tokenLeft(saved) > 120000){ agStatus('Signing you in…'); useToken(saved, true); }
   const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.defer = true;
   s.onload = initGoogle; s.onerror = () => showGate('Could not load Google sign-in. Check your internet connection.', true);
@@ -448,6 +469,8 @@ function initGoogle(){
    (also update the same lines in the dashboard, so both always show the same version).
    The form also saves its version with each submission (column "formVersion").
    Change log
+     5.5.1  28 Oct 2026  Faster start: one sign-in call brings access + KPI setup + the department's history; the next
+                       visit opens at once from the last saved copy while the sheet confirms in the background
      5.5  24 Oct 2026  Google sign-in on the GitHub page (@aaalay.com only) · every request carries the sign-in token,
                        checked by Apps Script v10 · heads see only their own department · Nikhil & Uday all departments
                        in the form · Nikhil, Uday & Pravin all departments on the dashboard
@@ -462,9 +485,9 @@ function initGoogle(){
                        for every department · Wk 27–29 re-opened until Sat 24 Oct 2026 · Sales head Pravin Shinde,
                        Customer Experience head Akash Swami · version shown in the footer
      5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
-const APP_VERSION = '5.5';
+const APP_VERSION = '5.5.1';
 const ACH_CAP = 100;                     /* maximum achievement % for any KPI, KRA and department score */
-const APP_UPDATED = '24 Oct 2026';
+const APP_UPDATED = '28 Oct 2026';
 const FORM_VERSION = APP_VERSION;
 
 /* =====================================================================
@@ -887,6 +910,10 @@ ownerSel.addEventListener('change', () => {
 /* ---------------- previous submissions (last week's actuals + duplicate check) ---------------- */
 function loadHistory(dept){
   HISTORY = null;
+  if (PRELOAD && PRELOAD.dept === dept){             /* came with the sign-in answer: no extra wait */
+    HISTORY = PRELOAD.rows; PRELOAD = null;
+    return Promise.resolve().then(() => { if (deptSel.value === dept) refreshHistoryHints(); });
+  }
   return getJSON('action=data&department=' + encodeURIComponent(dept)).then(j => {
     if (deptSel.value !== dept) return;
     HISTORY = j && (j.ok || Array.isArray(j)) ? (Array.isArray(j) ? j : j.rows || []) : [];
@@ -1594,11 +1621,22 @@ whenSignedIn(function pendingBanner(){
 function paintUser(){
   $('meNote').textContent = 'Signed in as ' + ME.email + ' · ';
   let bar = document.getElementById('agUser');
-  if (!bar){ bar = document.createElement('div'); bar.id = 'agUser'; bar.className = 'ag-user userbar'; const hdr = document.querySelector('header.top'); if (hdr) hdr.appendChild(bar); }
+  if (!bar){ bar = document.createElement('div'); bar.id = 'agUser'; bar.className = 'ag-user me-strip'; const main = document.querySelector('main'); if (main) main.insertBefore(bar, main.firstChild); }
   bar.innerHTML = '<span>Signed in: <b>' + esc(ME.name || ME.email) + '</b>' + (ME.all ? ' · all departments' : ' · ' + esc((ME.depts || []).join(', '))) + '</span>' +
     '<a href="https://aaalay.github.io/KRA-KPI-Dashboard/" target="_blank" rel="noopener">Performance tracker</a><button type="button" onclick="signOut()">Sign out</button>';
 }
-whenSignedIn(() => { applyConfig(buildDefaultConfig()); fillDepts(); loadConfig(); });
+/* apply the KPI setup that came with the sign-in (no separate "Loading KPI list" call) */
+function applyBoot(b, later){
+  const had = deptSel.value, typed = [...document.querySelectorAll('#kraContainer .act, #kraContainer .part')].some(el => el.value);
+  const before = JSON.stringify(CFG);
+  if (b && validConfig(b.config)){ applyConfig(b.config); $('cfgNote').textContent = 'KPI list updated by management' + (b.config.savedAt ? ' on ' + fmtDate(toISODate(b.config.savedAt)) : '') + '.'; }
+  else { applyConfig(buildDefaultConfig()); $('cfgNote').textContent = ''; }
+  if (b && b.dept && Array.isArray(b.rows) && later){ HISTORY = null; PRELOAD = { dept: b.dept, rows: b.rows }; }
+  cfgDone = true;
+  fillDepts();
+  if (later && had && deptSel.value === had && (JSON.stringify(CFG) !== before || PRELOAD) && !typed) buildKpis(had);
+}
+whenSignedIn(() => applyBoot(BOOT, false));
 document.querySelectorAll('.app-version').forEach(el => { el.textContent = 'AAALAY KRA & KPI Form · Version ' + APP_VERSION + ' · Updated ' + APP_UPDATED; });
 </script>
 </body>
