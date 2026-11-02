@@ -279,6 +279,8 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
    (also update the same lines in the dashboard, so both always show the same version).
    The form also saves its version with each submission (column "formVersion").
    Change log
+     5.7  2 Nov 2026   Edit window is the last TWO completed weeks (EDIT_WEEKS = 2): in the current week a head can fill
+                       or correct the previous week and the week before that; older weeks are locked.
      5.6  2 Nov 2026   New department B2B Sales added (head Naveen Bahadur) with 4 KRAs / 12 KPIs.
      5.5  2 Nov 2026   Section 3 "Weekly summary & action plan" questions removed from the form (highlights, gaps,
                        corrective action, support, critical issue) — only the score / Green / Amber / Red boxes remain;
@@ -295,7 +297,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
                        for every department · Wk 27–29 re-opened until Sat 24 Oct 2026 · Sales head Pravin Shinde,
                        Customer Experience head Akash Swami · version shown in the footer
      5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
-const APP_VERSION = '5.6';
+const APP_VERSION = '5.7';
 const ACH_CAP = 100;                     /* maximum achievement % for any KPI, KRA and department score */
 const APP_UPDATED = '2 Nov 2026';
 const FORM_VERSION = APP_VERSION;
@@ -775,13 +777,31 @@ let STATE = 'new', LOCKED = false, REBUILDING = false, PREFILLED = '', ORIG_DUE 
    The KRA / KPI sets changed in Oct 2026, so Wk 27, 28 and 29 (weeks ending 4, 11 and 18 Oct 2026)
    must be filled in again by every department. They stay open until REOPEN_UNTIL (Saturday 24 Oct 2026)
    even if their normal edit window has closed. Remove the week-end dates (or empty the list) after that. */
-const REOPEN_WEEKS = [];                 /* none currently re-opened */
-const REOPEN_UNTIL = '2026-10-24';
-function editDeadline(w){
-  const normal = fromDayNum(dayNum(w.to) + 7);
+/* ---- edit window: the last TWO completed weeks stay open ----
+   A head can fill in or correct the previous week and the week before that.
+   Example: in Wk 31 (current week), Wk 30 and Wk 29 are open; Wk 28 and older are locked.
+   Change EDIT_WEEKS to 1 for "last week only" or 3 for "last three weeks". */
+const EDIT_WEEKS = 2;
+const REOPEN_WEEKS = [];                 /* specific week-end dates to force open, e.g. '2026-10-18' */
+const REOPEN_UNTIL = '2026-10-24';       /* …open until this date */
+function currentWeek(){ return weekOf(todayISO()); }   /* the calendar week that contains today */
+function latestOpenWeek(){                              /* newest editable week = two weeks before the current calendar week */
+  const c = currentWeek(); if (!c) return null;
+  const prev = weekOf(fromDayNum(dayNum(c.from) - 1));   /* the week that just ended */
+  return prev ? weekOf(fromDayNum(dayNum(prev.from) - 1)) : null;
+}
+function weeksBetween(a, b){ return (!a || !b) ? 1e9 : Math.round((dayNum(b.from) - dayNum(a.from)) / 7); }
+function editDeadline(w){                 /* used only for the "editable until…" label */
+  const normal = fromDayNum(dayNum(w.to) + EDIT_WEEKS * 7);
   return REOPEN_WEEKS.includes(w.to) && REOPEN_UNTIL > normal ? REOPEN_UNTIL : normal;
 }
-function weekOpen(w){ return todayISO() <= editDeadline(w); }
+function weekOpen(w){
+  if (REOPEN_WEEKS.includes(w.to) && todayISO() <= REOPEN_UNTIL) return true;
+  const latest = latestOpenWeek(), wk = weekOf(w.to);
+  if (!latest || !wk) return false;
+  const gap = weeksBetween(wk, latest);   /* 0 = the week before the current one, 1 = the one before that, … */
+  return gap >= 0 && gap <= EDIT_WEEKS - 1;
+}
 function setLocked(on){
   LOCKED = on;
   document.querySelectorAll('#sect2 input, #sect2 select, #sect2 textarea, #sect3 input, #sect3 select, #sect3 textarea, #tactical input, #tactical textarea').forEach(el => { el.disabled = on; });
@@ -827,24 +847,29 @@ function prefillFrom(rows){
   cr.checked = true; $('criticalDetails').style.display = cr.value === 'Yes' ? 'block' : 'none';
   document.querySelectorAll('.kpi').forEach(updateRow);
 }
+function clearInputs(){
+  document.querySelectorAll('#kraContainer .act, #kraContainer .part, #kraContainer .xtra, #kraContainer .why-in, #kraContainer .cm-in').forEach(el => el.value = '');
+  document.querySelectorAll('#kraContainer .na').forEach(el => { el.checked = false; });
+  document.querySelectorAll('#tactical input, #tactical textarea').forEach(el => el.value = '');
+  document.querySelectorAll('.kpi').forEach(r => { if (window.updateRow) updateRow(r); });
+}
 function applySubmissionState(){
   const dept = deptSel.value, w = selectedWeek(), note = $('dupNotice');
   note.classList.remove('show', 'locked', 'editing');
   if (!dept || !w || !HISTORY) return;
   const subs = historyFor(dept, w.to), open = weekOpen(w);
-  const next = !subs.length ? 'new' : open ? 'edit' : 'locked';
+  const next = !open ? 'locked' : !subs.length ? 'new' : 'edit';
   const key = dept + '|' + ownerSel.value + '|' + w.to + '|' + next;
   const until = WEEKDAYS[new Date(dayNum(editDeadline(w)) * 864e5).getUTCDay()] + ' ' + fmtDate(editDeadline(w));
   let shown = PREFILLED === key;
-  if (next !== 'new' && PREFILLED !== key && (next === 'locked' || formIsEmpty())){ prefillFrom(latestSubmission(subs)); PREFILLED = key; shown = true; }
-  if (next === 'locked' && !LOCKED) setLocked(true);
+  if (subs.length && PREFILLED !== key && (next === 'locked' || formIsEmpty())){ prefillFrom(latestSubmission(subs)); PREFILLED = key; shown = true; }
+  if (next === 'locked'){ if (!subs.length) clearInputs(); if (!LOCKED) setLocked(true); }
   STATE = next;
   $('submitBtn').textContent = next === 'edit' ? 'Update weekly review' : 'Submit weekly review';
-  if (next === 'new'){
-    if (!open){ note.innerHTML = 'This week was due on Monday ' + fmtDate(dueDateOf(w)) + ' and was never submitted. You can still submit it once — it <b>cannot be edited afterwards</b>.'; note.classList.add('show'); }
-    return;
-  }
-  const last = latestSubmission(subs).pop(), by = fv(last, 'submissionOwner', 'submittedBy'), on = toISODate(fv(last, 'timestamp'));
+  if (next === 'new') return;
+  const lastArr = subs.length ? latestSubmission(subs) : [];
+  const last = lastArr.length ? lastArr[lastArr.length - 1] : null;
+  const by = last ? fv(last, 'submissionOwner', 'submittedBy') : '', on = last ? toISODate(fv(last, 'timestamp')) : '';
   const who = '<b>' + esc(dept) + '</b> was submitted for this week' + (on ? ' on ' + fmtDate(on) : '') + (by ? ' by ' + esc(by) : '') + '.';
   if (next === 'edit'){
     note.innerHTML = who + (shown ? ' The submitted figures are loaded below — correct what you need and press <b>Update weekly review</b>.' : ' Your unsaved changes on this device are shown below.') +
@@ -852,7 +877,9 @@ function applySubmissionState(){
     note.classList.add('show', 'editing');
     $('draftNote').textContent = 'Editing your submitted review — changes are saved on this device until you update.';
   } else {
-    note.innerHTML = '<b>Locked.</b> ' + who + ' The edit window closed on ' + until + ', so the figures below are read-only. If a correction is needed, ask management to edit it from the dashboard.';
+    note.innerHTML = subs.length
+      ? '<b>Locked.</b> ' + who + ' The two-week edit window has closed, so the figures below are read-only. If a correction is needed, ask management to edit it from the dashboard.'
+      : '<b>Locked.</b> ' + fmtDate(w.from, false) + ' – ' + fmtDate(w.to) + ' is older than the last two weeks, so it can no longer be filled in. Only the previous two weeks can be submitted. If this week must still be entered, ask management.';
     note.classList.add('show', 'locked');
   }
 }
