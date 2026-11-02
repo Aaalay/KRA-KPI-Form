@@ -235,50 +235,16 @@
   </section>
 
   <section class="card" id="sect3">
-    <h2><span class="num">3</span> Weekly summary &amp; action plan</h2>
+    <h2><span class="num">3</span> Weekly summary</h2>
     <div class="score-strip" id="scoreStrip"></div>
-    <div class="grid2">
-      <div class="field">
-        <label class="req" for="keyAchievements">Key activities / highlights of the week</label>
-        <textarea id="keyAchievements" placeholder="e.g. 3 campaigns launched, 42 site visits, 2 property audits"></textarea>
-      </div>
-      <div class="field">
-        <label class="req" for="nextWeekPriorities">Top priorities for next week</label>
-        <textarea id="nextWeekPriorities" placeholder="2–3 priorities for next week"></textarea>
-      </div>
-    </div>
-    <div class="field">
-      <label for="keyChallenges" id="lblGap">Main gaps &amp; reasons</label>
-      <textarea id="keyChallenges" placeholder="Why were Red / Amber KPIs missed?"></textarea>
-    </div>
-    <div class="grid3" style="grid-template-columns:2fr 1fr 1fr;">
-      <div class="field">
-        <label for="correctiveAction" id="lblAction">Corrective action</label>
-        <textarea id="correctiveAction" placeholder="What will be done to recover the Red KPIs"></textarea>
-      </div>
-      <div class="field">
-        <label for="actionOwner" id="lblActOwner">Action owner</label>
-        <input type="text" id="actionOwner" placeholder="Who is responsible">
-      </div>
-      <div class="field">
-        <label for="actionDue" id="lblActDue">Action due date</label>
-        <input type="date" id="actionDue">
-      </div>
-    </div>
-    <div class="field">
-      <label for="supportRequired">Support needed from management</label>
-      <textarea id="supportRequired" placeholder="Optional"></textarea>
-    </div>
-    <div class="field">
-      <label class="req">Any critical issue needing immediate management attention?</label>
-      <div class="yn">
-        <label><input type="radio" name="criticalIssue" value="Yes"> Yes</label>
-        <label><input type="radio" name="criticalIssue" value="No" checked> No</label>
-      </div>
-      <div id="criticalDetails">
-        <label class="req" for="criticalIssueDetails">Describe the issue and the action needed</label>
-        <textarea id="criticalIssueDetails"></textarea>
-      </div>
+    <!-- Section-3 inputs removed. Hidden carriers keep the backend/dashboard fields blank so nothing breaks. -->
+    <div style="display:none;">
+      <textarea id="keyAchievements"></textarea><textarea id="nextWeekPriorities"></textarea>
+      <textarea id="keyChallenges"></textarea><textarea id="correctiveAction"></textarea>
+      <input type="text" id="actionOwner"><input type="date" id="actionDue">
+      <textarea id="supportRequired"></textarea>
+      <input type="radio" name="criticalIssue" value="Yes"><input type="radio" name="criticalIssue" value="No" checked>
+      <div id="criticalDetails"><textarea id="criticalIssueDetails"></textarea></div>
     </div>
     <div id="tactical" style="display:none;"></div>
 
@@ -313,8 +279,11 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
    (also update the same lines in the dashboard, so both always show the same version).
    The form also saves its version with each submission (column "formVersion").
    Change log
-     5.6  28 Oct 2026  Sign-in removed for now — opens straight away, no Google login (same features as 5.4:
-                       Tactical Review, period views, new Sales KRA 3, 100% cap). Works with Apps Script v7.
+     5.6  2 Nov 2026   New department B2B Sales added (head Naveen Bahadur) with 4 KRAs / 12 KPIs.
+     5.5  2 Nov 2026   Section 3 "Weekly summary & action plan" questions removed from the form (highlights, gaps,
+                       corrective action, support, critical issue) — only the score / Green / Amber / Red boxes remain;
+                       matching "Gap, reason & corrective action" panel removed from the dashboard. Last week stays
+                       editable through the current week (7-day window).
      5.4  24 Oct 2026  Tactical Review in management's format: Coaching (with timings) · Creation ·
                        Problems & Support · Meeting Closure — simple wording, department focus shown as a tip
      5.3  24 Oct 2026  Sales KRA 3 "Growth Pipeline — New Inventory & B2B" (MIT / Non-MIT / WP, pipeline beds, B2B ACV,
@@ -328,7 +297,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
      5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
 const APP_VERSION = '5.6';
 const ACH_CAP = 100;                     /* maximum achievement % for any KPI, KRA and department score */
-const APP_UPDATED = '28 Oct 2026';
+const APP_UPDATED = '2 Nov 2026';
 const FORM_VERSION = APP_VERSION;
 
 /* =====================================================================
@@ -356,6 +325,12 @@ const DEFAULT_RAW = [
   ['Lead-to-Booking Conversion Efficiency', 25, [['Lead → Booking Conversion %',18,'%','h','p'],['Site Visit → Booking Conversion %',40,'%','h','p'],['Unconverted Students Converted',2,'students / week','h','n']]],
   ['Field Sales & BTL Activation', 20, [['BTL Activities Conducted (colleges, coaching centres, admission desks)',3,'activities / week','h','n'],['Leads Generated from Sales BTL',25,'leads / week','h','n'],['BTL Lead → Site Visit Conversion %',30,'%','h','p'],['Institutional / Corporate Tie-up Meetings',3,'meetings / week','h','n']]],
   ['Team Execution & Accountability', 15, [['Team Avg Scorecard Achievement %',90,'%','h','p'],['Competition Benchmarking',10,'benchmarks / week','h','n']]]
+ ]],
+ ['B2B Sales', 'Naveen Bahadur', 'Revenue', [
+  ['Pipeline Building & Prospecting', 25, [['New Decision-Makers Sourced (verified contacts)',15,'contacts / week','h','n'],['Meetings Scheduled',10,'meetings / week','h','n'],['Meetings Completed',5,'meetings / week','h','n']]],
+  ['Proposals & Conversion', 40, [['Proposals / Presentations Sent',14,'proposals / week','h','n'],['B2B Beds Booked (net)',30,'beds / week','h','n'],['B2B Revenue / ACV Won',390000,'₹ / week','h','c'],['Meeting → Deal Conversion %',20,'%','h','p']]],
+  ['Account Growth', 20, [['New Institutional / Corporate Accounts Signed',1,'accounts / week','h','n'],['Total Beds Signed',50,'beds','h','n'],['Active Accounts Renewed / Expanded',1,'accounts / week','h','n']]],
+  ['CRM Discipline & Accountability', 15, [['CRM Hygiene Score %',90,'%','h','p'],['Client Follow-up / Email SLA %',95,'%','h','p']]]
  ]],
  ['Operations', 'Arindam Paul & Jayanta Panigrahi', 'EBITDA / Cost', [
   ['Customer Experience in Residence Satisfaction', 40, [['Residence Pulse Score Weightage (≤ 5%)',5,'%','l','p'],['Complaint Resolution Time (≤ 24 hrs) & Repeat Complaint Rate',100,'% combined score','h','p'],['Weekly Audit Score',90,'%','h','p']]],
@@ -745,12 +720,12 @@ function setOwner(dept){
     ownerSel.style.display = 'block'; box.style.display = 'none';
     $('ownerLbl').textContent = 'Submitted by (select head)';
   }
-  if (!$('actionOwner').value) $('actionOwner').value = heads.length === 1 ? heads[0] : '';
+
   PREV_OWNER = ownerSel.value;
 }
 let PREV_OWNER = '';
 ownerSel.addEventListener('change', () => {
-  if (!$('actionOwner').value || headsOf(deptSel.value).includes($('actionOwner').value)) $('actionOwner').value = ownerSel.value;
+
   if (!PREV_OWNER && !LOCKED) saveDraft();          /* entries typed before the head was chosen move to that head */
   PREV_OWNER = ownerSel.value;
   if (deptSel.value) buildKpis(deptSel.value);      /* each head has their own submission, draft and lock */
@@ -800,7 +775,7 @@ let STATE = 'new', LOCKED = false, REBUILDING = false, PREFILLED = '', ORIG_DUE 
    The KRA / KPI sets changed in Oct 2026, so Wk 27, 28 and 29 (weeks ending 4, 11 and 18 Oct 2026)
    must be filled in again by every department. They stay open until REOPEN_UNTIL (Saturday 24 Oct 2026)
    even if their normal edit window has closed. Remove the week-end dates (or empty the list) after that. */
-const REOPEN_WEEKS = ['2026-10-04', '2026-10-11', '2026-10-18'];
+const REOPEN_WEEKS = [];                 /* none currently re-opened */
 const REOPEN_UNTIL = '2026-10-24';
 function editDeadline(w){
   const normal = fromDayNum(dayNum(w.to) + 7);
@@ -1177,8 +1152,6 @@ function refreshTotals(){
     '<div><div class="v" style="color:var(--g)">' + counts.G + '</div><div class="l">Green KPIs</div></div>' +
     '<div><div class="v" style="color:var(--a)">' + counts.A + '</div><div class="l">Amber KPIs</div></div>' +
     '<div><div class="v" style="color:var(--r)">' + counts.R + '</div><div class="l">Red KPIs' + (redKras ? ' · ' + redKras + ' Red KRA' + (redKras > 1 ? 's' : '') : '') + (nnFail ? ' · non-negotiable failed' : '') + '</div></div>';
-  $('lblGap').classList.toggle('req', counts.R + counts.A > 0);
-  ['lblAction','lblActOwner','lblActDue'].forEach(id => $(id).classList.toggle('req', counts.R > 0));
 }
 
 function showTracker(dept){
@@ -1252,16 +1225,6 @@ function validate(){
   let kraNoReason = 0;
   if (deptSel.value) kraScores().forEach((s, ki) => { if (s !== null && ragOf(s) === 'R' && !$('kra_r_' + ki).value.trim()){ kraNoReason++; mark($('kra_r_' + ki)); } });
   if (kraNoReason) errs.push(kraNoReason + ' Red KRA(s) need a remark.');
-  if (!$('keyAchievements').value.trim()){ errs.push('Add the key activities / highlights of the week.'); mark($('keyAchievements')); }
-  if (!$('nextWeekPriorities').value.trim()){ errs.push('Add the top priorities for next week.'); mark($('nextWeekPriorities')); }
-  if (reds + ambers && !$('keyChallenges').value.trim()){ errs.push('Add the main gaps & reasons.'); mark($('keyChallenges')); }
-  if (reds){
-    if (!$('correctiveAction').value.trim()){ errs.push('Add a corrective action for the Red KPIs.'); mark($('correctiveAction')); }
-    if (!$('actionOwner').value.trim()){ errs.push('Add the action owner.'); mark($('actionOwner')); }
-    if (!$('actionDue').value){ errs.push('Add the action due date.'); mark($('actionDue')); }
-  }
-  if ($('actionDue').value && $('actionDue').value < todayISO() && $('actionDue').value !== ORIG_DUE) errs.push('Action due date cannot be in the past.');
-  if (document.querySelector('input[name="criticalIssue"]:checked').value === 'Yes' && !$('criticalIssueDetails').value.trim()){ errs.push('Describe the critical issue.'); mark($('criticalIssueDetails')); }
   const td = tacticalData();
   if (td){
     let gaps = 0;
