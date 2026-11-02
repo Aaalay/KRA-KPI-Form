@@ -784,11 +784,11 @@ let STATE = 'new', LOCKED = false, REBUILDING = false, PREFILLED = '', ORIG_DUE 
 const EDIT_WEEKS = 2;
 const REOPEN_WEEKS = [];                 /* specific week-end dates to force open, e.g. '2026-10-18' */
 const REOPEN_UNTIL = '2026-10-24';       /* …open until this date */
-function currentWeek(){ return weekOf(todayISO()); }   /* the calendar week that contains today */
-function latestOpenWeek(){                              /* newest editable week = two weeks before the current calendar week */
-  const c = currentWeek(); if (!c) return null;
-  const prev = weekOf(fromDayNum(dayNum(c.from) - 1));   /* the week that just ended */
-  return prev ? weekOf(fromDayNum(dayNum(prev.from) - 1)) : null;
+function latestOpenWeek(){     /* the newest week a head submits for = the latest FULLY-COMPLETED week */
+  const t = todayISO();
+  let k = weekOf(t);                                    /* the calendar week containing today */
+  if (k && k.to >= t) k = weekOf(fromDayNum(dayNum(k.from) - 1));   /* today's week isn't finished → step to the week that just ended */
+  return k;
 }
 function weeksBetween(a, b){ return (!a || !b) ? 1e9 : Math.round((dayNum(b.from) - dayNum(a.from)) / 7); }
 function editDeadline(w){                 /* used only for the "editable until…" label */
@@ -799,7 +799,7 @@ function weekOpen(w){
   if (REOPEN_WEEKS.includes(w.to) && todayISO() <= REOPEN_UNTIL) return true;
   const latest = latestOpenWeek(), wk = weekOf(w.to);
   if (!latest || !wk) return false;
-  const gap = weeksBetween(wk, latest);   /* 0 = the week before the current one, 1 = the one before that, … */
+  const gap = weeksBetween(wk, latest);   /* 0 = latest completed week, 1 = the week before it, … */
   return gap >= 0 && gap <= EDIT_WEEKS - 1;
 }
 function setLocked(on){
