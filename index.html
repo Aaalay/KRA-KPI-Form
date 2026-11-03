@@ -279,6 +279,8 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
    (also update the same lines in the dashboard, so both always show the same version).
    The form also saves its version with each submission (column "formVersion").
    Change log
+     5.8  2 Nov 2026   New departments now always appear: the saved setup is merged with the built-in list, so a department
+                       added in the code (e.g. B2B Sales) shows on every load instead of appearing only on some refreshes.
      5.7  2 Nov 2026   Edit window is the last TWO completed weeks (EDIT_WEEKS = 2): in the current week a head can fill
                        or correct the previous week and the week before that; older weeks are locked.
      5.6  2 Nov 2026   New department B2B Sales added (head Naveen Bahadur) with 4 KRAs / 12 KPIs.
@@ -297,7 +299,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
                        for every department · Wk 27–29 re-opened until Sat 24 Oct 2026 · Sales head Pravin Shinde,
                        Customer Experience head Akash Swami · version shown in the footer
      5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
-const APP_VERSION = '5.7';
+const APP_VERSION = '5.8';
 const ACH_CAP = 100;                     /* maximum achievement % for any KPI, KRA and department score */
 const APP_UPDATED = '2 Nov 2026';
 const FORM_VERSION = APP_VERSION;
@@ -510,8 +512,19 @@ function reviseConfig(cfg){
   return cfg;
 }
 let CFG = null, RAG = null, LIB = {}, DEPTS = [], KPI_INDEX = {};
+/* Merge the saved setup with the built-in list so a department added to the code
+   (e.g. B2B Sales) still appears even if the saved setup is older and doesn't have it.
+   Saved departments win on content; built-in ones are added only when missing. */
+function mergeWithDefaults(cfg){
+  const def = buildDefaultConfig();
+  if (!cfg || !Array.isArray(cfg.depts)) return def;
+  const have = new Set(cfg.depts.map(d => String(d.name)));
+  def.depts.forEach(d => { if (!have.has(d.name)) cfg.depts.push(JSON.parse(JSON.stringify(d))); });
+  return cfg;
+}
 function applyConfig(cfg){
   if (!validConfig(cfg)) cfg = buildDefaultConfig();
+  cfg = mergeWithDefaults(JSON.parse(JSON.stringify(cfg)));
   CFG = reviseDepts(reviseConfig(JSON.parse(JSON.stringify(cfg))));
   RAG = Object.assign({ green:90, amber:70, cap:ACH_CAP }, CFG.rag || {});
   RAG.green = +RAG.green; RAG.amber = +RAG.amber;
