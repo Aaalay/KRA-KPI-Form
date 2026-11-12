@@ -279,6 +279,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
    (also update the same lines in the dashboard, so both always show the same version).
    The form also saves its version with each submission (column "formVersion").
    Change log
+     5.9  12 Nov 2026  Finance Activity Tracker link now opens the new Finance Weekly KPI KRA Tracker sheet
      5.8  2 Nov 2026   New departments now always appear: the saved setup is merged with the built-in list, so a department
                        added in the code (e.g. B2B Sales) shows on every load instead of appearing only on some refreshes.
      5.7  2 Nov 2026   Edit window is the last TWO completed weeks (EDIT_WEEKS = 2): in the current week a head can fill
@@ -299,9 +300,9 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwywd4UHY81VF
                        for every department · Wk 27–29 re-opened until Sat 24 Oct 2026 · Sales head Pravin Shinde,
                        Customer Experience head Akash Swami · version shown in the footer
      5.0  10 Oct 2026  Revised KRA / KPI sets for all departments */
-const APP_VERSION = '5.8';
+const APP_VERSION = '5.9';
 const ACH_CAP = 100;                     /* maximum achievement % for any KPI, KRA and department score */
-const APP_UPDATED = '2 Nov 2026';
+const APP_UPDATED = '12 Nov 2026';
 const FORM_VERSION = APP_VERSION;
 
 /* =====================================================================
@@ -431,7 +432,7 @@ const TRACKER_SHEETS = {
   'Customer Experience': 'https://docs.google.com/spreadsheets/d/1_1bC5zxe_1Ee_0scClKW8rR33ulVN6VklouTKnPdV5k/edit?gid=778668545#gid=778668545',
   'Business Development': 'https://docs.google.com/spreadsheets/d/1XG2yildlnl1rMZNs6Mfq5BmMlgmzsdctx14GEUfgMY0/edit?gid=177383776#gid=177383776',
   'HR': 'https://docs.google.com/spreadsheets/d/19QFxZMBDD66FT64KBu65NjXqk-TRwzT28QX_nR0_uAs/edit',
-  'Finance': 'https://docs.google.com/spreadsheets/d/1qYvGHzTExpqyPtG-CR-7BLLZkmJzEvLcFey9P4lHrJE/edit?gid=665047281#gid=665047281',
+  'Finance': 'https://docs.google.com/spreadsheets/d/1BIhQ77bCKqishCNSGQFlMz9oZk1ujSxEkQOYoLWBtn0/edit?gid=1333026405#gid=1333026405',
   'Nodal & Security': 'https://docs.google.com/spreadsheets/d/1ivs_lUrVYVzu7hhE-ZvMJyVbJiNO0qNiMJsXPWIU7fk/edit',
   'Purchase': 'https://docs.google.com/spreadsheets/d/1jMpyAhIikuLA0PO9zTJ7HkzdpOFETHlOAiWm-YcaKqc/edit?gid=2119722747#gid=2119722747',
   'Data Analytics': 'https://docs.google.com/spreadsheets/d/1JX5YrE6HZWtDg15cUUY6lOdB2YrvxACquKRveTZHeao/edit',
